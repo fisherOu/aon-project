@@ -10,3 +10,4 @@ broadcast/
 .env
 private_key
 logs/
+deploy.json
