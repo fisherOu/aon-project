@@ -37,7 +37,7 @@ contract MarkSystem is System {
   function executeTyped(MarkInfo memory markInfo) public returns (bytes memory) {
     ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
     if (zkCheck.getValue(SingletonID)) {
-      uint256[6] memory input = new uint256[6]();
+      uint256[] memory input = new uint256[](6);
       input[0] = markInfo.coord_hash;
       input[1] = markInfo.perlin;
       input[2] = markInfo.radius;

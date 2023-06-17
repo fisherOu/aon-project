@@ -40,7 +40,7 @@ contract Movev2System is System {
   function executeTyped(MoveInfo memory moveInfo) public returns (bytes memory) {
     ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
     if (zkCheck.getValue(SingletonID)) {
-      uint256[6] memory input = new uint256[6]();
+      uint256[] memory input = new uint256[](6);
       input[0] = moveInfo.coord_hash;
       input[1] = moveInfo.perlin;
       input[2] = moveInfo.radius;

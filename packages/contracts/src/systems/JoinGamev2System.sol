@@ -45,7 +45,7 @@ contract JoinGamev2System is System {
             getAddressById(components, ZkCheckComponentID)
         );
         if (zkCheck.getValue(SingletonID)) {
-            uint256[4] memory input = new uint256[4]();
+            uint256[] memory input = new uint256[](4);
             input[0] = joinInfo.coord_hash;
             input[1] = joinInfo.perlin;
             input[2] = joinInfo.radius;
