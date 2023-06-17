@@ -67,7 +67,7 @@ contract MapConfigv2Component is BareComponent {
       uint64 gameOriginY,
       uint64 gameRadiusX,
       uint64 gameRadiusY,
-      uint64 decimals,) = abi.decode(getRawValue(SingletonID), (uint64, uint64, uint64, uint64, uint64, uint64, uint64));
+      uint64 decimals) = abi.decode(getRawValue(SingletonID), (uint64, uint64, uint64, uint64, uint64, uint64, uint64));
     return
       MapConfig(resourceDifficulty, treasureDifficulty, gameOriginX, gameOriginY, gameRadiusX, gameRadiusY, decimals);
   }

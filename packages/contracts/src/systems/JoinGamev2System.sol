@@ -89,7 +89,7 @@ contract JoinGamev2System is System {
         // uint256 warshipId = world.getUniqueEntityId();
         WarshipComponent(getAddressById(components, WarshipComponentID)).set(
             entityId,
-            Warship("warship")
+            Warship("warship", uint64(now))
         );
         MoveCooldownComponent(
             getAddressById(components, MoveCooldownComponentID)
