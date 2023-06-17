@@ -45,7 +45,7 @@ contract JoinGamev2System is System {
             getAddressById(components, ZkCheckComponentID)
         );
         if (zkCheck.getValue(SingletonID)) {
-            uint256[4] memory input = new uint256[](4);
+            uint256[4] memory input = new uint256[4]();
             input[0] = joinInfo.coord_hash;
             input[1] = joinInfo.perlin;
             input[2] = joinInfo.radius;
@@ -89,10 +89,10 @@ contract JoinGamev2System is System {
         // uint256 warshipId = world.getUniqueEntityId();
         WarshipComponent(getAddressById(components, WarshipComponentID)).set(
             entityId,
-            Warship("warship", uint64(now))
+            Warship("warship", uint64(block.timestamp))
         );
         MoveCooldownComponent(
             getAddressById(components, MoveCooldownComponentID)
-        ).set(entityId, MoveCooldown(uint64(now), moveConfig.initPoints));
+        ).set(entityId, MoveCooldown(uint64(block.timestamp), moveConfig.initPoints));
     }
 }

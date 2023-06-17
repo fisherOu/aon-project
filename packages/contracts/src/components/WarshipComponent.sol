@@ -30,6 +30,6 @@ contract WarshipComponent is BareComponent {
 
   function getValue(uint256 entity) public view returns (Warship memory) {
     (string memory model, uint64 createTime) = abi.decode(getRawValue(entity), (string, uint64));
-    return Warship(model);
+    return Warship(model, createTime);
   }
 }

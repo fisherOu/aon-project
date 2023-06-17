@@ -40,7 +40,7 @@ contract Movev2System is System {
   function executeTyped(MoveInfo memory moveInfo) public returns (bytes memory) {
     ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
     if (zkCheck.getValue(SingletonID)) {
-      uint256[6] memory input = new uint256[](6);
+      uint256[6] memory input = new uint256[6]();
       input[0] = moveInfo.coord_hash;
       input[1] = moveInfo.perlin;
       input[2] = moveInfo.radius;
@@ -58,7 +58,7 @@ contract Movev2System is System {
     MoveConfig memory moveConfig = MoveConfigComponent(getAddressById(components, MoveConfigComponentID)).getValue();
     MoveCooldown memory movable = moveCooldown.getValue(entityId);
     require(
-      movable.remainingMovePoints > 0 || uint64(now) - movable.lastMoveTime > moveConfig.increaseCooldown,
+      movable.remainingMovePoints > 0 || uint64(block.timestamp) - movable.lastMoveTime > moveConfig.increaseCooldown,
       "no move points"
     );
     require(moveInfo.distance <= moveConfig.maxDistance, "move too far");
@@ -69,12 +69,12 @@ contract Movev2System is System {
 
     HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).set(entityId, moveInfo.coord_hash);
     uint64 remainPoints = movable.remainingMovePoints +
-      (uint64(now) - movable.lastMoveTime) /
+      (uint64(block.timestamp) - movable.lastMoveTime) /
       moveConfig.increaseCooldown -
       1;
     if (remainPoints > moveConfig.maxPoints) {
       remainPoints = moveConfig.maxPoints;
     }
-    moveCooldown.set(entityId, MoveCooldown(uint64(uint64(now)), remainPoints));
+    moveCooldown.set(entityId, MoveCooldown(uint64(uint64(block.timestamp)), remainPoints));
   }
 }
