@@ -13,7 +13,7 @@ import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerCompone
 import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
 import {WarshipComponent, ID as WarshipComponentID, Warship} from "components/WarshipComponent.sol";
 import {MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown} from "components/MoveCooldownComponent.sol";
-import {Verifier} from "libraries/Verifier.sol";
+// import {Verifier} from "libraries/Verifier.sol";
 
 uint256 constant ID = uint256(keccak256("system.JoinGamev2"));
 
@@ -41,21 +41,21 @@ contract JoinGamev2System is System {
     function executeTyped(
         JoinInfo memory joinInfo
     ) public returns (bytes memory) {
-        ZkCheckComponent zkCheck = ZkCheckComponent(
-            getAddressById(components, ZkCheckComponentID)
-        );
-        if (zkCheck.getValue(SingletonID)) {
-            uint256[4] memory input = [joinInfo.coord_hash, joinInfo.perlin, joinInfo.radius, joinInfo.seed];
-            require(
-                Verifier.verifyInitProof(
-                    joinInfo.a,
-                    joinInfo.b,
-                    joinInfo.c,
-                    input
-                ),
-                "Failed init proof check"
-            );
-        }
+        // ZkCheckComponent zkCheck = ZkCheckComponent(
+        //     getAddressById(components, ZkCheckComponentID)
+        // );
+        // if (zkCheck.getValue(SingletonID)) {
+        //     uint256[4] memory input = [joinInfo.coord_hash, joinInfo.perlin, joinInfo.radius, joinInfo.seed];
+        //     require(
+        //         Verifier.verifyInitProof(
+        //             joinInfo.a,
+        //             joinInfo.b,
+        //             joinInfo.c,
+        //             input
+        //         ),
+        //         "Failed init proof check"
+        //     );
+        // }
         uint256 entityId = addressToEntity(msg.sender);
 
         PlayerComponent player = PlayerComponent(

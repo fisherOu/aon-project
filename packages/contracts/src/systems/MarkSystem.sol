@@ -10,7 +10,7 @@ import { ZkCheckComponent, ID as ZkCheckComponentID } from "components/ZkCheckCo
 import { SingletonID } from "solecs/SingletonID.sol";
 
 import { SpaceTimeMarkerComponent, ID as SpaceTimeMarkerComponentID, SpaceTimeMarker } from "components/SpaceTimeMarkerComponent.sol";
-import { Verifier } from "libraries/Verifier.sol";
+// import { Verifier } from "libraries/Verifier.sol";
 
 uint256 constant ID = uint256(keccak256("system.Mark"));
 
@@ -35,11 +35,11 @@ contract MarkSystem is System {
   }
 
   function executeTyped(MarkInfo memory markInfo) public returns (bytes memory) {
-    ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
-    if (zkCheck.getValue(SingletonID)) {
-      uint256[6] memory input = [markInfo.coordHash, markInfo.perlin, markInfo.radius, markInfo.seed, markInfo.realHash, markInfo.distance];
-      require(Verifier.verifyMoveProof(markInfo.a, markInfo.b, markInfo.c, input), "Failed mark proof check");
-    }
+    // ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
+    // if (zkCheck.getValue(SingletonID)) {
+      // uint256[6] memory input = [markInfo.coordHash, markInfo.perlin, markInfo.radius, markInfo.seed, markInfo.realHash, markInfo.distance];
+      // require(Verifier.verifyMoveProof(markInfo.a, markInfo.b, markInfo.c, input), "Failed mark proof check");
+    // }
 
     // Constrain position to map size, wrapping around if necessary
     MapConfig memory mapConfig = MapConfigv2Component(getAddressById(components, MapConfigv2ComponentID)).getValue();

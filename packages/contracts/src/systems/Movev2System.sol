@@ -13,7 +13,7 @@ import { PlayerComponent, ID as PlayerComponentID } from "components/PlayerCompo
 import { HiddenPositionComponent, ID as HiddenPositionComponentID } from "components/HiddenPositionComponent.sol";
 import { WarshipComponent, ID as WarshipComponentID, Warship } from "components/WarshipComponent.sol";
 import { MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown } from "components/MoveCooldownComponent.sol";
-import { Verifier } from "libraries/Verifier.sol";
+// import { Verifier } from "libraries/Verifier.sol";
 
 uint256 constant ID = uint256(keccak256("system.Movev2"));
 
@@ -38,11 +38,11 @@ contract Movev2System is System {
   }
 
   function executeTyped(MoveInfo memory moveInfo) public returns (bytes memory) {
-    ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
-    if (zkCheck.getValue(SingletonID)) {
-      uint256[6] memory input = [moveInfo.coordHash, moveInfo.perlin, moveInfo.radius, moveInfo.seed, moveInfo.oldHash, moveInfo.distance];
-      require(Verifier.verifyMoveProof(moveInfo.a, moveInfo.b, moveInfo.c, input), "Failed move proof check");
-    }
+    // ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
+    // if (zkCheck.getValue(SingletonID)) {
+    //   uint256[6] memory input = [moveInfo.coordHash, moveInfo.perlin, moveInfo.radius, moveInfo.seed, moveInfo.oldHash, moveInfo.distance];
+    //   require(Verifier.verifyMoveProof(moveInfo.a, moveInfo.b, moveInfo.c, input), "Failed move proof check");
+    // }
     uint256 entityId = addressToEntity(msg.sender);
 
     PlayerComponent player = PlayerComponent(getAddressById(components, PlayerComponentID));
