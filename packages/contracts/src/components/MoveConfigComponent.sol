@@ -51,12 +51,10 @@ contract MoveConfigComponent is BareComponent {
     }
 
     function getValue() public view returns (MoveConfig memory) {
-        (
-            uint64 initPoints,
+        (uint64 initPoints,
             uint64 increaseCooldown,
             uint64 maxPoints,
-            uint64 maxDistance
-        ) = abi.decode(
+            uint64 maxDistance) = abi.decode(
                 getRawValue(SingletonID),
                 (uint64, uint64, uint64, uint64)
             );
