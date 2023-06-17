@@ -37,13 +37,7 @@ contract MarkSystem is System {
   function executeTyped(MarkInfo memory markInfo) public returns (bytes memory) {
     ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
     if (zkCheck.getValue(SingletonID)) {
-      uint256[] memory input = new uint256[](6);
-      input[0] = markInfo.coord_hash;
-      input[1] = markInfo.perlin;
-      input[2] = markInfo.radius;
-      input[3] = markInfo.seed;
-      input[4] = markInfo.real_hash;
-      input[5] = markInfo.distance;
+      uint256[6] memory input = [markInfo.coord_hash, markInfo.perlin, markInfo.radius, markInfo.seed, markInfo.real_hash, markInfo.distance];
       require(Verifier.verifyMoveProof(markInfo.a, markInfo.b, markInfo.c, input), "Failed mark proof check");
     }
 
