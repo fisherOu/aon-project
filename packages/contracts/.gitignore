@@ -8,3 +8,5 @@ abi/
 types/
 broadcast/
 .env
+private_key
+logs/
