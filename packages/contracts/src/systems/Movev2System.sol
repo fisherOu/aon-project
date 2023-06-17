@@ -56,7 +56,7 @@ contract Movev2System is System {
 
     MoveCooldownComponent moveCooldown = MoveCooldownComponent(getAddressById(components, MoveCooldownComponentID));
     MoveConfig memory moveConfig = MoveConfigComponent(getAddressById(components, MoveConfigComponentID)).getValue();
-    MoveCooldown movable = moveCooldown.getValue(entityId);
+    MoveCooldown memory movable = moveCooldown.getValue(entityId);
     require(
       movable.remainingMovePoints > 0 || uint64(now) - movable.lastMoveTime > moveConfig.increaseCooldown,
       "no move points"
