@@ -40,7 +40,7 @@ contract Movev2System is System {
   function executeTyped(MoveInfo memory moveInfo) public returns (bytes memory) {
     ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
     if (zkCheck.getValue(SingletonID)) {
-      uint256[6] memory input = [markInfo.coord_hash, markInfo.perlin, markInfo.radius, markInfo.seed, markInfo.old_hash, markInfo.distance];
+      uint256[6] memory input = [moveInfo.coord_hash, moveInfo.perlin, moveInfo.radius, moveInfo.seed, moveInfo.old_hash, moveInfo.distance];
       require(Verifier.verifyMoveProof(moveInfo.a, moveInfo.b, moveInfo.c, input), "Failed move proof check");
     }
     uint256 entityId = addressToEntity(msg.sender);
