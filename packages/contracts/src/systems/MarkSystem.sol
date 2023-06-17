@@ -15,11 +15,11 @@ import { Verifier } from "libraries/Verifier.sol";
 uint256 constant ID = uint256(keccak256("system.Mark"));
 
 struct MarkInfo {
-  uint256 coord_hash;
+  uint256 coordHash;
   uint256 perlin;
   uint256 radius;
   uint256 seed;
-  uint256 real_hash;
+  uint256 realHash;
   uint256 distance;
   uint256[2] a;
   uint256[2][2] b;
@@ -37,7 +37,7 @@ contract MarkSystem is System {
   function executeTyped(MarkInfo memory markInfo) public returns (bytes memory) {
     ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
     if (zkCheck.getValue(SingletonID)) {
-      uint256[6] memory input = [markInfo.coord_hash, markInfo.perlin, markInfo.radius, markInfo.seed, markInfo.real_hash, markInfo.distance];
+      uint256[6] memory input = [markInfo.coordHash, markInfo.perlin, markInfo.radius, markInfo.seed, markInfo.realHash, markInfo.distance];
       require(Verifier.verifyMoveProof(markInfo.a, markInfo.b, markInfo.c, input), "Failed mark proof check");
     }
 
@@ -50,7 +50,7 @@ contract MarkSystem is System {
     require(markInfo.distance <= visionConfig.maxDistance, "mark too far");
 
     SpaceTimeMarkerComponent(getAddressById(components, SpaceTimeMarkerComponentID)).set(
-      markInfo.real_hash,
+      markInfo.realHash,
       SpaceTimeMarker(markInfo.seed, uint64(block.timestamp) + visionConfig.remainTime)
     );
   }

@@ -18,11 +18,11 @@ import { Verifier } from "libraries/Verifier.sol";
 uint256 constant ID = uint256(keccak256("system.Movev2"));
 
 struct MoveInfo {
-  uint256 coord_hash;
+  uint256 coordHash;
   uint256 perlin;
   uint256 radius;
   uint256 seed;
-  uint256 old_hash;
+  uint256 oldHash;
   uint256 distance;
   uint256[2] a;
   uint256[2][2] b;
@@ -40,7 +40,7 @@ contract Movev2System is System {
   function executeTyped(MoveInfo memory moveInfo) public returns (bytes memory) {
     ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
     if (zkCheck.getValue(SingletonID)) {
-      uint256[6] memory input = [moveInfo.coord_hash, moveInfo.perlin, moveInfo.radius, moveInfo.seed, moveInfo.old_hash, moveInfo.distance];
+      uint256[6] memory input = [moveInfo.coordHash, moveInfo.perlin, moveInfo.radius, moveInfo.seed, moveInfo.oldHash, moveInfo.distance];
       require(Verifier.verifyMoveProof(moveInfo.a, moveInfo.b, moveInfo.c, input), "Failed move proof check");
     }
     uint256 entityId = addressToEntity(msg.sender);
@@ -61,7 +61,7 @@ contract Movev2System is System {
     MapConfig memory mapConfig = MapConfigv2Component(getAddressById(components, MapConfigv2ComponentID)).getValue();
     require(moveInfo.radius <= mapConfig.gameRadiusX && moveInfo.radius <= mapConfig.gameRadiusY, "radius over limit");
 
-    HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).set(entityId, moveInfo.coord_hash);
+    HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).set(entityId, moveInfo.coordHash);
     uint64 remainPoints = movable.remainingMovePoints +
       (uint64(block.timestamp) - movable.lastMoveTime) /
       moveConfig.increaseCooldown -
