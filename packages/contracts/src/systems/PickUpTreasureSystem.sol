@@ -6,8 +6,8 @@ import {System, IWorld} from "solecs/System.sol";
 import {getAddressById} from "solecs/utils.sol";
 import {MapConfigv2Component, ID as MapConfigv2ComponentID, MapConfig} from "components/MapConfigv2Component.sol";
 import {TreasureConfigComponent, ID as TreasureConfigComponentID, TreasureConfig, PropertyConfigRange, TreasureTypes} from "components/TreasureConfigComponent.sol";
-import {ZkCheckComponent, ID as ZkCheckComponentID} from "components/ZkCheckComponent.sol";
-import {SingletonID} from "solecs/SingletonID.sol";
+import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components/ZKConfigComponent.sol";
+// import {SingletonID} from "solecs/SingletonID.sol";
 
 import {ResourcePositionComponent, ID as ResourcePositionComponentID} from "components/ResourcePositionComponent.sol";
 import {PlayerBelongingComponent, ID as PlayerBelongingComponentID} from "components/PlayerBelongingComponent.sol";
@@ -16,7 +16,7 @@ import {TreasureComponent, ID as TreasureComponentID, Treasure} from "components
 // import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
 // import {WarshipComponent, ID as WarshipComponentID, Warship} from "components/WarshipComponent.sol";
 // import {MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown} from "components/MoveCooldownComponent.sol";
-// import {Verifier} from "libraries/Verifier.sol";
+import {IInitVerifier} from "libraries/InitVerifier.sol";
 
 uint256 constant ID = uint256(keccak256("system.PickUpTreasure"));
 
@@ -47,21 +47,21 @@ contract PickUpTreasureSystem is System {
     function executeTyped(
         PickUpInfo memory pickUpInfo
     ) public returns (bytes memory) {
-        // ZkCheckComponent zkCheck = ZkCheckComponent(
-        //     getAddressById(components, ZkCheckComponentID)
-        // );
-        // if (zkCheck.getValue(SingletonID)) {
-        //     uint256[4] memory input = [pickUpInfo.coordHash, pickUpInfo.perlin, pickUpInfo.radius, pickUpInfo.seed];
-        //     require(
-        //         Verifier.verifyInitProof(
-        //             pickUpInfo.a,
-        //             pickUpInfo.b,
-        //             pickUpInfo.c,
-        //             input
-        //         ),
-        //         "Failed init proof check"
-        //     );
-        // }
+        ZKConfigComponent zkConfig = ZKConfigComponent(
+            getAddressById(components, ZKConfigComponentID)
+        ).getValue();
+        if (zkConfig.open) {
+            uint256[4] memory input = [pickUpInfo.seed, pickUpInfo.perlin, pickUpInfo.radius, pickUpInfo.coordHash];
+            require(
+                IInitVerifier(zkConfig.initVerifyAddress).verifyProof(
+                    pickUpInfo.a,
+                    pickUpInfo.b,
+                    pickUpInfo.c,
+                    input
+                ),
+                "Failed pickup proof check"
+            );
+        }
         uint256 entityId = addressToEntity(msg.sender);
 
         // Constrain position to map size, wrapping around if necessary
@@ -72,6 +72,13 @@ contract PickUpTreasureSystem is System {
             pickUpInfo.radius <= mapConfig.gameRadiusX &&
                 pickUpInfo.radius <= mapConfig.gameRadiusY,
             "radius over limit"
+        );
+        require(
+            // hash <= treasureDifficulty <= resourceDifficulty || resourceDifficulty < hash <= treasureDifficulty
+            (pickUpInfo.coordHash <= mapConfig.treasureDifficulty &&
+                mapConfig.treasureDifficulty <= mapConfig.resourceDifficulty) || (pickUpInfo.coordHash <= mapConfig.treasureDifficulty &&
+                pickUpInfo.coordHash > mapConfig.resourceDifficulty),
+            "no treasure to pick up"
         );
         ResourcePositionComponent resourcePosition = ResourcePositionComponent(
             getAddressById(components, ResourcePositionComponentID)
@@ -88,17 +95,19 @@ contract PickUpTreasureSystem is System {
             getAddressById(components, PlayerBelongingComponentID)
         );
         require(!playerBelonging.has(treasureId), "Already pickedUp");
-        TreasureConfig memory moveConfig = TreasureConfigComponent(
+        TreasureConfig memory treasureConfig = TreasureConfigComponent(
             getAddressById(components, TreasureConfigComponentID)
         ).getValue();
+        require(pickUpInfo.energy >= treasureConfig.energyMin && pickUpInfo.energy <= treasureConfig.energyMax, "energy over limit");
 
         // generate treasure properties
+        
         TreasureComponent(getAddressById(components, TreasureComponentID)).set(
             entityId,
             Treasure(pickUpInfo.energy, pickUpInfo.treasureType)
         );
         // MoveCooldownComponent(
         //     getAddressById(components, MoveCooldownComponentID)
-        // ).set(entityId, MoveCooldown(uint64(block.timestamp), moveConfig.initPoints));
+        // ).set(entityId, MoveCooldown(uint64(block.timestamp), treasureConfig.initPoints));
     }
 }

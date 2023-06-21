@@ -6,14 +6,14 @@ import {System, IWorld} from "solecs/System.sol";
 import {getAddressById} from "solecs/utils.sol";
 import {MapConfigv2Component, ID as MapConfigv2ComponentID, MapConfig} from "components/MapConfigv2Component.sol";
 import {MoveConfigComponent, ID as MoveConfigComponentID, MoveConfig} from "components/MoveConfigComponent.sol";
-import {ZkCheckComponent, ID as ZkCheckComponentID} from "components/ZkCheckComponent.sol";
-import {SingletonID} from "solecs/SingletonID.sol";
+import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components/ZKConfigComponent.sol";
+// import {SingletonID} from "solecs/SingletonID.sol";
 
 import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerComponent.sol";
 import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
 import {WarshipComponent, ID as WarshipComponentID, Warship} from "components/WarshipComponent.sol";
 import {MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown} from "components/MoveCooldownComponent.sol";
-// import {Verifier} from "libraries/Verifier.sol";
+import {IInitVerifier} from "libraries/InitVerifier.sol";
 
 uint256 constant ID = uint256(keccak256("system.JoinGamev2"));
 
@@ -41,21 +41,21 @@ contract JoinGamev2System is System {
     function executeTyped(
         JoinInfo memory joinInfo
     ) public returns (bytes memory) {
-        // ZkCheckComponent zkCheck = ZkCheckComponent(
-        //     getAddressById(components, ZkCheckComponentID)
-        // );
-        // if (zkCheck.getValue(SingletonID)) {
-        //     uint256[4] memory input = [joinInfo.coordHash, joinInfo.perlin, joinInfo.radius, joinInfo.seed];
-        //     require(
-        //         Verifier.verifyInitProof(
-        //             joinInfo.a,
-        //             joinInfo.b,
-        //             joinInfo.c,
-        //             input
-        //         ),
-        //         "Failed init proof check"
-        //     );
-        // }
+        ZKConfigComponent zkConfig = ZKConfigComponent(
+            getAddressById(components, ZKConfigComponentID)
+        ).getValue();
+        if (zkConfig.open) {
+            uint256[4] memory input = [joinInfo.seed, joinInfo.perlin, joinInfo.radius, joinInfo.coordHash];
+            require(
+                IInitVerifier(zkConfig.initVerifyAddress).verifyProof(
+                    joinInfo.a,
+                    joinInfo.b,
+                    joinInfo.c,
+                    input
+                ),
+                "Failed init proof check"
+            );
+        }
         uint256 entityId = addressToEntity(msg.sender);
 
         PlayerComponent player = PlayerComponent(

@@ -6,14 +6,14 @@ import { System, IWorld } from "solecs/System.sol";
 import { getAddressById } from "solecs/utils.sol";
 import { MapConfigv2Component, ID as MapConfigv2ComponentID, MapConfig } from "components/MapConfigv2Component.sol";
 import { MoveConfigComponent, ID as MoveConfigComponentID, MoveConfig } from "components/MoveConfigComponent.sol";
-import { ZkCheckComponent, ID as ZkCheckComponentID } from "components/ZkCheckComponent.sol";
-import { SingletonID } from "solecs/SingletonID.sol";
+import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components/ZKConfigComponent.sol";
+// import {SingletonID} from "solecs/SingletonID.sol";
 
 import { PlayerComponent, ID as PlayerComponentID } from "components/PlayerComponent.sol";
 import { HiddenPositionComponent, ID as HiddenPositionComponentID } from "components/HiddenPositionComponent.sol";
 import { WarshipComponent, ID as WarshipComponentID, Warship } from "components/WarshipComponent.sol";
 import { MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown } from "components/MoveCooldownComponent.sol";
-// import { Verifier } from "libraries/Verifier.sol";
+import {IMoveVerifier} from "libraries/MoveVerifier.sol";
 
 uint256 constant ID = uint256(keccak256("system.Movev2"));
 
@@ -38,11 +38,21 @@ contract Movev2System is System {
   }
 
   function executeTyped(MoveInfo memory moveInfo) public returns (bytes memory) {
-    // ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
-    // if (zkCheck.getValue(SingletonID)) {
-    //   uint256[6] memory input = [moveInfo.coordHash, moveInfo.perlin, moveInfo.radius, moveInfo.seed, moveInfo.oldHash, moveInfo.distance];
-    //   require(Verifier.verifyMoveProof(moveInfo.a, moveInfo.b, moveInfo.c, input), "Failed move proof check");
-    // }
+    ZKConfigComponent zkConfig = ZKConfigComponent(
+        getAddressById(components, ZKConfigComponentID)
+    ).getValue();
+    if (zkConfig.open) {
+        uint256[6] memory input = [moveInfo.seed, moveInfo.perlin, moveInfo.radius, moveInfo.distance, moveInfo.oldHash, moveInfo.coordHash];
+        require(
+            IMoveVerifier(zkConfig.moveVerifyAddress).verifyProof(
+                moveInfo.a,
+                moveInfo.b,
+                moveInfo.c,
+                input
+            ),
+            "Failed pickup proof check"
+        );
+    }
     uint256 entityId = addressToEntity(msg.sender);
 
     PlayerComponent player = PlayerComponent(getAddressById(components, PlayerComponentID));

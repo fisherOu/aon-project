@@ -6,11 +6,11 @@ import { System, IWorld } from "solecs/System.sol";
 import { getAddressById } from "solecs/utils.sol";
 import { MapConfigv2Component, ID as MapConfigv2ComponentID, MapConfig } from "components/MapConfigv2Component.sol";
 import { VisionConfigComponent, ID as VisionConfigComponentID, VisionConfig } from "components/VisionConfigComponent.sol";
-import { ZkCheckComponent, ID as ZkCheckComponentID } from "components/ZkCheckComponent.sol";
-import { SingletonID } from "solecs/SingletonID.sol";
+import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components/ZKConfigComponent.sol";
+// import {SingletonID} from "solecs/SingletonID.sol";
 
 import { SpaceTimeMarkerComponent, ID as SpaceTimeMarkerComponentID, SpaceTimeMarker } from "components/SpaceTimeMarkerComponent.sol";
-// import { Verifier } from "libraries/Verifier.sol";
+import {IInitVerifier} from "libraries/InitVerifier.sol";
 
 uint256 constant ID = uint256(keccak256("system.Mark"));
 
@@ -35,11 +35,21 @@ contract MarkSystem is System {
   }
 
   function executeTyped(MarkInfo memory markInfo) public returns (bytes memory) {
-    // ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
-    // if (zkCheck.getValue(SingletonID)) {
-      // uint256[6] memory input = [markInfo.coordHash, markInfo.perlin, markInfo.radius, markInfo.seed, markInfo.realHash, markInfo.distance];
-      // require(Verifier.verifyMoveProof(markInfo.a, markInfo.b, markInfo.c, input), "Failed mark proof check");
-    // }
+    ZKConfigComponent zkConfig = ZKConfigComponent(
+        getAddressById(components, ZKConfigComponentID)
+    ).getValue();
+    if (zkConfig.open) {
+        uint256[4] memory input = [markInfo.seed, markInfo.perlin, markInfo.radius, markInfo.coordHash];
+        require(
+            IInitVerifier(zkConfig.initVerifyAddress).verifyProof(
+                markInfo.a,
+                markInfo.b,
+                markInfo.c,
+                input
+            ),
+            "Failed mark proof check"
+        );
+    }
 
     // Constrain position to map size, wrapping around if necessary
     MapConfig memory mapConfig = MapConfigv2Component(getAddressById(components, MapConfigv2ComponentID)).getValue();
