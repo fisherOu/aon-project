@@ -60,7 +60,7 @@ contract TreasureConfigComponent is BareComponent {
   }
 
   function set(TreasureConfig memory treasureConfig) public {
-    set(SingletonID, abi.encode(treasureConfig.energyMax, treasureConfig.energyMin, treasureConfig.treasureTypes, treasureConfig.terrain));
+    set(SingletonID, abi.encode(treasureConfig.energyMax, treasureConfig.energyMin, treasureConfig.treasureTypes, treasureConfig.properties));
   }
 
   function getValue() public view returns (TreasureConfig memory) {
