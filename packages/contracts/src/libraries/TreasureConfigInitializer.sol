@@ -99,56 +99,56 @@ library TreasureConfigInitializer {
 
         for (uint32 y = 0; y < height; y++) {
             // bytes8(uint64(treasureProperties[y][0]));
-            types[x * treasureWidth + 0] = bytes8(uint64(treasureProperties[y][0]))[0];
-            types[x * treasureWidth + 1] = bytes8(uint64(treasureProperties[y][0]))[1];
-            types[x * treasureWidth + 2] = bytes8(uint64(treasureProperties[y][0]))[2];
-            types[x * treasureWidth + 3] = bytes8(uint64(treasureProperties[y][0]))[3];
-            types[x * treasureWidth + 4] = bytes8(uint64(treasureProperties[y][0]))[4];
-            types[x * treasureWidth + 5] = bytes8(uint64(treasureProperties[y][0]))[5];
-            types[x * treasureWidth + 6] = bytes8(uint64(treasureProperties[y][0]))[6];
-            types[x * treasureWidth + 7] = bytes8(uint64(treasureProperties[y][0]))[7];
-            types[x * treasureWidth + 8] = bytes1(uint8(treasureTypes[y][1]));
-            types[x * treasureWidth + 9] = bytes1(uint8(treasureTypes[y][2]));
+            types[y * treasureWidth + 0] = bytes8(uint64(treasureProperties[y][0]))[0];
+            types[y * treasureWidth + 1] = bytes8(uint64(treasureProperties[y][0]))[1];
+            types[y * treasureWidth + 2] = bytes8(uint64(treasureProperties[y][0]))[2];
+            types[y * treasureWidth + 3] = bytes8(uint64(treasureProperties[y][0]))[3];
+            types[y * treasureWidth + 4] = bytes8(uint64(treasureProperties[y][0]))[4];
+            types[y * treasureWidth + 5] = bytes8(uint64(treasureProperties[y][0]))[5];
+            types[y * treasureWidth + 6] = bytes8(uint64(treasureProperties[y][0]))[6];
+            types[y * treasureWidth + 7] = bytes8(uint64(treasureProperties[y][0]))[7];
+            types[y * treasureWidth + 8] = bytes1(uint8(treasureTypes[y][1]));
+            types[y * treasureWidth + 9] = bytes1(uint8(treasureTypes[y][2]));
             // bytes4(uint32(treasureProperties[y][3]));
-            types[x * treasureWidth + 10] = bytes4(uint32(treasureProperties[y][3]))[0];
-            types[x * treasureWidth + 11] = bytes4(uint32(treasureProperties[y][3]))[1];
-            types[x * treasureWidth + 12] = bytes4(uint32(treasureProperties[y][3]))[2];
-            types[x * treasureWidth + 13] = bytes4(uint32(treasureProperties[y][3]))[3];
+            types[y * treasureWidth + 10] = bytes4(uint32(treasureProperties[y][3]))[0];
+            types[y * treasureWidth + 11] = bytes4(uint32(treasureProperties[y][3]))[1];
+            types[y * treasureWidth + 12] = bytes4(uint32(treasureProperties[y][3]))[2];
+            types[y * treasureWidth + 13] = bytes4(uint32(treasureProperties[y][3]))[3];
             // bytes4(uint32(treasureProperties[y][4])),
-            types[x * treasureWidth + 14] = bytes4(uint32(treasureProperties[y][4]))[0];
-            types[x * treasureWidth + 15] = bytes4(uint32(treasureProperties[y][4]))[1];
-            types[x * treasureWidth + 16] = bytes4(uint32(treasureProperties[y][4]))[2];
-            types[x * treasureWidth + 17] = bytes4(uint32(treasureProperties[y][4]))[3];
+            types[y * treasureWidth + 14] = bytes4(uint32(treasureProperties[y][4]))[0];
+            types[y * treasureWidth + 15] = bytes4(uint32(treasureProperties[y][4]))[1];
+            types[y * treasureWidth + 16] = bytes4(uint32(treasureProperties[y][4]))[2];
+            types[y * treasureWidth + 17] = bytes4(uint32(treasureProperties[y][4]))[3];
             // bytes4(uint32(treasureProperties[y][5])),
-            types[x * treasureWidth + 18] = bytes4(uint32(treasureProperties[y][5]))[0];
-            types[x * treasureWidth + 19] = bytes4(uint32(treasureProperties[y][5]))[1];
-            types[x * treasureWidth + 20] = bytes4(uint32(treasureProperties[y][5]))[2];
-            types[x * treasureWidth + 21] = bytes4(uint32(treasureProperties[y][5]))[3];
+            types[y * treasureWidth + 18] = bytes4(uint32(treasureProperties[y][5]))[0];
+            types[y * treasureWidth + 19] = bytes4(uint32(treasureProperties[y][5]))[1];
+            types[y * treasureWidth + 20] = bytes4(uint32(treasureProperties[y][5]))[2];
+            types[y * treasureWidth + 21] = bytes4(uint32(treasureProperties[y][5]))[3];
             // bytes4(uint32(treasureProperties[y][6])),
-            types[x * treasureWidth + 22] = bytes4(uint32(treasureProperties[y][6]))[0];
-            types[x * treasureWidth + 23] = bytes4(uint32(treasureProperties[y][6]))[1];
-            types[x * treasureWidth + 24] = bytes4(uint32(treasureProperties[y][6]))[2];
-            types[x * treasureWidth + 25] = bytes4(uint32(treasureProperties[y][6]))[3];
+            types[y * treasureWidth + 22] = bytes4(uint32(treasureProperties[y][6]))[0];
+            types[y * treasureWidth + 23] = bytes4(uint32(treasureProperties[y][6]))[1];
+            types[y * treasureWidth + 24] = bytes4(uint32(treasureProperties[y][6]))[2];
+            types[y * treasureWidth + 25] = bytes4(uint32(treasureProperties[y][6]))[3];
             // bytes4(uint32(treasureProperties[y][7])),
-            types[x * treasureWidth + 26] = bytes4(uint32(treasureProperties[y][7]))[0];
-            types[x * treasureWidth + 27] = bytes4(uint32(treasureProperties[y][7]))[1];
-            types[x * treasureWidth + 28] = bytes4(uint32(treasureProperties[y][7]))[2];
-            types[x * treasureWidth + 29] = bytes4(uint32(treasureProperties[y][7]))[3];
+            types[y * treasureWidth + 26] = bytes4(uint32(treasureProperties[y][7]))[0];
+            types[y * treasureWidth + 27] = bytes4(uint32(treasureProperties[y][7]))[1];
+            types[y * treasureWidth + 28] = bytes4(uint32(treasureProperties[y][7]))[2];
+            types[y * treasureWidth + 29] = bytes4(uint32(treasureProperties[y][7]))[3];
             // bytes4(uint32(treasureProperties[y][8])),
-            types[x * treasureWidth + 30] = bytes4(uint32(treasureProperties[y][8]))[0];
-            types[x * treasureWidth + 31] = bytes4(uint32(treasureProperties[y][8]))[1];
-            types[x * treasureWidth + 32] = bytes4(uint32(treasureProperties[y][8]))[2];
-            types[x * treasureWidth + 33] = bytes4(uint32(treasureProperties[y][8]))[3];
+            types[y * treasureWidth + 30] = bytes4(uint32(treasureProperties[y][8]))[0];
+            types[y * treasureWidth + 31] = bytes4(uint32(treasureProperties[y][8]))[1];
+            types[y * treasureWidth + 32] = bytes4(uint32(treasureProperties[y][8]))[2];
+            types[y * treasureWidth + 33] = bytes4(uint32(treasureProperties[y][8]))[3];
             // bytes4(uint32(treasureProperties[y][9])),
-            types[x * treasureWidth + 34] = bytes4(uint32(treasureProperties[y][9]))[0];
-            types[x * treasureWidth + 35] = bytes4(uint32(treasureProperties[y][9]))[1];
-            types[x * treasureWidth + 36] = bytes4(uint32(treasureProperties[y][9]))[2];
-            types[x * treasureWidth + 37] = bytes4(uint32(treasureProperties[y][9]))[3];
+            types[y * treasureWidth + 34] = bytes4(uint32(treasureProperties[y][9]))[0];
+            types[y * treasureWidth + 35] = bytes4(uint32(treasureProperties[y][9]))[1];
+            types[y * treasureWidth + 36] = bytes4(uint32(treasureProperties[y][9]))[2];
+            types[y * treasureWidth + 37] = bytes4(uint32(treasureProperties[y][9]))[3];
             // bytes4(uint32(treasureProperties[y][10]))
-            types[x * treasureWidth + 38] = bytes4(uint32(treasureProperties[y][10]))[0];
-            types[x * treasureWidth + 39] = bytes4(uint32(treasureProperties[y][10]))[1];
-            types[x * treasureWidth + 40] = bytes4(uint32(treasureProperties[y][10]))[2];
-            types[x * treasureWidth + 41] = bytes4(uint32(treasureProperties[y][10]))[3];
+            types[y * treasureWidth + 38] = bytes4(uint32(treasureProperties[y][10]))[0];
+            types[y * treasureWidth + 39] = bytes4(uint32(treasureProperties[y][10]))[1];
+            types[y * treasureWidth + 40] = bytes4(uint32(treasureProperties[y][10]))[2];
+            types[y * treasureWidth + 41] = bytes4(uint32(treasureProperties[y][10]))[3];
         }
 
         treasureConfig.set(TreasureConfig({ energyMax: 200, energyMin: 50, treasureTypes: types, properties: properties }));
