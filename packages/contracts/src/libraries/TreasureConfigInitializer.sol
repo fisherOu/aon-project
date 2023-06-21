@@ -22,7 +22,7 @@ library TreasureConfigInitializer {
         // TerrainType O = TerrainType.None;
         // TerrainType T = TerrainType.TallGrass;
         // TerrainType B = TerrainType.Boulder;
-        uint256[7][6] memory treasureTypes = [
+        uint16[6][7] memory treasureTypes = [
             [0, 1, 1, 2001, 1001, 3001],
             [1, 1, 1, 2002, 1002, 3002],
             [2, 1, 1, 2003, 1003, 0],
@@ -77,7 +77,7 @@ library TreasureConfigInitializer {
             types[x * treasureWidth + 33] = bytes8(uint64(treasureTypes[x][5]))[7];
         }
 
-        uint256[13][11] memory treasureProperties = [
+        uint16[11][13] memory treasureProperties = [
             [1001, 1, 1, 10, 20, 1, 10, 20, 1, 30, 0],
             [1002, 1, 0, 10, 20, 1, 2, 20, 1, 0, 0],
             [1003, 1, 3, 10, 20, 1, 35, 20, 1, 0, 0],
