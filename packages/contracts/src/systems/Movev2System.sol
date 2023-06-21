@@ -62,7 +62,7 @@ contract Movev2System is System {
     require(moveInfo.radius <= mapConfig.gameRadiusX && moveInfo.radius <= mapConfig.gameRadiusY, "radius over limit");
 
     HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).set(entityId, moveInfo.coordHash);
-    if (distance > 1) {
+    if (moveInfo.distance > 1) {
       uint64 remainPoints = movable.remainingMovePoints +
         (uint64(block.timestamp) - movable.lastMoveTime) /
         moveConfig.increaseCooldown -
