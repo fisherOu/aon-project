@@ -46,7 +46,7 @@ contract PickUpTreasureSystem is System {
     function executeTyped(
         PickUpInfo memory pickUpInfo
     ) public returns (bytes memory) {
-        ZKConfigComponent zkConfig = ZKConfigComponent(
+        ZKConfig memory zkConfig = ZKConfigComponent(
             getAddressById(components, ZKConfigComponentID)
         ).getValue();
         if (zkConfig.open) {

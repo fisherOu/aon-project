@@ -34,7 +34,7 @@ contract MarkSystem is System {
   }
 
   function executeTyped(MarkInfo memory markInfo) public returns (bytes memory) {
-    ZKConfigComponent zkConfig = ZKConfigComponent(
+    ZKConfig memory zkConfig = ZKConfigComponent(
         getAddressById(components, ZKConfigComponentID)
     ).getValue();
     if (zkConfig.open) {
