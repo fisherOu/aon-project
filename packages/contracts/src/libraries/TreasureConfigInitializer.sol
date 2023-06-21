@@ -32,18 +32,49 @@ library TreasureConfigInitializer {
             [6, 1, 0, 0, 1504, 0]
         ];
         uint32 treasureHeight = uint32(treasureTypes.length);
-        // uint32 width = uint32(42);
-        bytes memory types = new bytes();
+        uint32 treasureWidth = uint32(34);
+        bytes memory types = new bytes(treasureHeight * treasureWidth);
 
         for (uint32 x = 0; x < treasureHeight; x++) {
-            types = abi.encodePacked(types,
-                bytes8(uint64(treasureTypes[x][0])),
-                bytes1(uint8(treasureTypes[x][1])),
-                bytes1(uint8(treasureTypes[x][2])),
-                bytes8(uint64(treasureTypes[x][3])),
-                bytes8(uint64(treasureTypes[x][4])),
-                bytes8(uint64(treasureTypes[x][5]))
-            );
+            // bytes8(uint64(treasureTypes[x][0]));
+            types[x * treasureWidth + 0] = bytes8(uint64(treasureTypes[x][0]))[0];
+            types[x * treasureWidth + 1] = bytes8(uint64(treasureTypes[x][0]))[1];
+            types[x * treasureWidth + 2] = bytes8(uint64(treasureTypes[x][0]))[2];
+            types[x * treasureWidth + 3] = bytes8(uint64(treasureTypes[x][0]))[3];
+            types[x * treasureWidth + 4] = bytes8(uint64(treasureTypes[x][0]))[4];
+            types[x * treasureWidth + 5] = bytes8(uint64(treasureTypes[x][0]))[5];
+            types[x * treasureWidth + 6] = bytes8(uint64(treasureTypes[x][0]))[6];
+            types[x * treasureWidth + 7] = bytes8(uint64(treasureTypes[x][0]))[7];
+
+            types[x * treasureWidth + 8] = bytes1(uint8(treasureTypes[x][1]));
+            types[x * treasureWidth + 9] = bytes1(uint8(treasureTypes[x][2]));
+            // bytes8(uint64(treasureTypes[x][3]));
+            types[x * treasureWidth + 10] = bytes8(uint64(treasureTypes[x][3]))[0];
+            types[x * treasureWidth + 11] = bytes8(uint64(treasureTypes[x][3]))[1];
+            types[x * treasureWidth + 12] = bytes8(uint64(treasureTypes[x][3]))[2];
+            types[x * treasureWidth + 13] = bytes8(uint64(treasureTypes[x][3]))[3];
+            types[x * treasureWidth + 14] = bytes8(uint64(treasureTypes[x][3]))[4];
+            types[x * treasureWidth + 15] = bytes8(uint64(treasureTypes[x][3]))[5];
+            types[x * treasureWidth + 16] = bytes8(uint64(treasureTypes[x][3]))[6];
+            types[x * treasureWidth + 17] = bytes8(uint64(treasureTypes[x][3]))[7];
+            // bytes8(uint64(treasureTypes[x][4]));
+            types[x * treasureWidth + 18] = bytes8(uint64(treasureTypes[x][4]))[0];
+            types[x * treasureWidth + 19] = bytes8(uint64(treasureTypes[x][4]))[1];
+            types[x * treasureWidth + 20] = bytes8(uint64(treasureTypes[x][4]))[2];
+            types[x * treasureWidth + 21] = bytes8(uint64(treasureTypes[x][4]))[3];
+            types[x * treasureWidth + 22] = bytes8(uint64(treasureTypes[x][4]))[4];
+            types[x * treasureWidth + 23] = bytes8(uint64(treasureTypes[x][4]))[5];
+            types[x * treasureWidth + 24] = bytes8(uint64(treasureTypes[x][4]))[6];
+            types[x * treasureWidth + 25] = bytes8(uint64(treasureTypes[x][4]))[7];
+            // bytes8(uint64(treasureTypes[x][5]));
+            types[x * treasureWidth + 26] = bytes8(uint64(treasureTypes[x][5]))[0];
+            types[x * treasureWidth + 27] = bytes8(uint64(treasureTypes[x][5]))[1];
+            types[x * treasureWidth + 28] = bytes8(uint64(treasureTypes[x][5]))[2];
+            types[x * treasureWidth + 29] = bytes8(uint64(treasureTypes[x][5]))[3];
+            types[x * treasureWidth + 30] = bytes8(uint64(treasureTypes[x][5]))[4];
+            types[x * treasureWidth + 31] = bytes8(uint64(treasureTypes[x][5]))[5];
+            types[x * treasureWidth + 32] = bytes8(uint64(treasureTypes[x][5]))[6];
+            types[x * treasureWidth + 33] = bytes8(uint64(treasureTypes[x][5]))[7];
         }
 
         uint256[13][11] memory treasureProperties = [
@@ -63,23 +94,61 @@ library TreasureConfigInitializer {
         ];
 
         uint32 height = uint32(treasureProperties.length);
-        // uint32 width = uint32(42);
-        bytes memory properties = new bytes();
+        uint32 width = uint32(42);
+        bytes memory properties = new bytes(width * height);
 
         for (uint32 y = 0; y < height; y++) {
-            properties = abi.encodePacked(properties,
-                bytes8(uint64(treasureProperties[y][0])),
-                bytes1(uint8(treasureProperties[y][1])),
-                bytes1(uint8(treasureProperties[y][2])),
-                bytes4(uint32(treasureProperties[y][3])),
-                bytes4(uint32(treasureProperties[y][4])),
-                bytes4(uint32(treasureProperties[y][5])),
-                bytes4(uint32(treasureProperties[y][6])),
-                bytes4(uint32(treasureProperties[y][7])),
-                bytes4(uint32(treasureProperties[y][8])),
-                bytes4(uint32(treasureProperties[y][9])),
-                bytes4(uint32(treasureProperties[y][10]))
-            );
+            // bytes8(uint64(treasureProperties[y][0]));
+            types[x * treasureWidth + 0] = bytes8(uint64(treasureProperties[y][0]))[0];
+            types[x * treasureWidth + 1] = bytes8(uint64(treasureProperties[y][0]))[1];
+            types[x * treasureWidth + 2] = bytes8(uint64(treasureProperties[y][0]))[2];
+            types[x * treasureWidth + 3] = bytes8(uint64(treasureProperties[y][0]))[3];
+            types[x * treasureWidth + 4] = bytes8(uint64(treasureProperties[y][0]))[4];
+            types[x * treasureWidth + 5] = bytes8(uint64(treasureProperties[y][0]))[5];
+            types[x * treasureWidth + 6] = bytes8(uint64(treasureProperties[y][0]))[6];
+            types[x * treasureWidth + 7] = bytes8(uint64(treasureProperties[y][0]))[7];
+            types[x * treasureWidth + 8] = bytes1(uint8(treasureTypes[y][1]));
+            types[x * treasureWidth + 9] = bytes1(uint8(treasureTypes[y][2]));
+            // bytes4(uint32(treasureProperties[y][3]));
+            types[x * treasureWidth + 10] = bytes4(uint32(treasureProperties[y][3]))[0];
+            types[x * treasureWidth + 11] = bytes4(uint32(treasureProperties[y][3]))[1];
+            types[x * treasureWidth + 12] = bytes4(uint32(treasureProperties[y][3]))[2];
+            types[x * treasureWidth + 13] = bytes4(uint32(treasureProperties[y][3]))[3];
+            // bytes4(uint32(treasureProperties[y][4])),
+            types[x * treasureWidth + 14] = bytes4(uint32(treasureProperties[y][4]))[0];
+            types[x * treasureWidth + 15] = bytes4(uint32(treasureProperties[y][4]))[1];
+            types[x * treasureWidth + 16] = bytes4(uint32(treasureProperties[y][4]))[2];
+            types[x * treasureWidth + 17] = bytes4(uint32(treasureProperties[y][4]))[3];
+            // bytes4(uint32(treasureProperties[y][5])),
+            types[x * treasureWidth + 18] = bytes4(uint32(treasureProperties[y][5]))[0];
+            types[x * treasureWidth + 19] = bytes4(uint32(treasureProperties[y][5]))[1];
+            types[x * treasureWidth + 20] = bytes4(uint32(treasureProperties[y][5]))[2];
+            types[x * treasureWidth + 21] = bytes4(uint32(treasureProperties[y][5]))[3];
+            // bytes4(uint32(treasureProperties[y][6])),
+            types[x * treasureWidth + 22] = bytes4(uint32(treasureProperties[y][6]))[0];
+            types[x * treasureWidth + 23] = bytes4(uint32(treasureProperties[y][6]))[1];
+            types[x * treasureWidth + 24] = bytes4(uint32(treasureProperties[y][6]))[2];
+            types[x * treasureWidth + 25] = bytes4(uint32(treasureProperties[y][6]))[3];
+            // bytes4(uint32(treasureProperties[y][7])),
+            types[x * treasureWidth + 26] = bytes4(uint32(treasureProperties[y][7]))[0];
+            types[x * treasureWidth + 27] = bytes4(uint32(treasureProperties[y][7]))[1];
+            types[x * treasureWidth + 28] = bytes4(uint32(treasureProperties[y][7]))[2];
+            types[x * treasureWidth + 29] = bytes4(uint32(treasureProperties[y][7]))[3];
+            // bytes4(uint32(treasureProperties[y][8])),
+            types[x * treasureWidth + 30] = bytes4(uint32(treasureProperties[y][8]))[0];
+            types[x * treasureWidth + 31] = bytes4(uint32(treasureProperties[y][8]))[1];
+            types[x * treasureWidth + 32] = bytes4(uint32(treasureProperties[y][8]))[2];
+            types[x * treasureWidth + 33] = bytes4(uint32(treasureProperties[y][8]))[3];
+            // bytes4(uint32(treasureProperties[y][9])),
+            types[x * treasureWidth + 34] = bytes4(uint32(treasureProperties[y][9]))[0];
+            types[x * treasureWidth + 35] = bytes4(uint32(treasureProperties[y][9]))[1];
+            types[x * treasureWidth + 36] = bytes4(uint32(treasureProperties[y][9]))[2];
+            types[x * treasureWidth + 37] = bytes4(uint32(treasureProperties[y][9]))[3];
+            // bytes4(uint32(treasureProperties[y][10]))
+            types[x * treasureWidth + 38] = bytes4(uint32(treasureProperties[y][10]))[0];
+            types[x * treasureWidth + 39] = bytes4(uint32(treasureProperties[y][10]))[1];
+            types[x * treasureWidth + 40] = bytes4(uint32(treasureProperties[y][10]))[2];
+            types[x * treasureWidth + 41] = bytes4(uint32(treasureProperties[y][10]))[3];
         }
 
         treasureConfig.set(TreasureConfig({ energyMax: 200, energyMin: 50, treasureTypes: types, properties: properties }));
