@@ -16,7 +16,6 @@ uint256 constant ID = uint256(keccak256("system.Mark"));
 
 struct MarkInfo {
   uint256 coordHash;
-  uint256 perlin;
   uint256 radius;
   uint256 seed;
   uint256 realHash;
@@ -39,7 +38,7 @@ contract MarkSystem is System {
         getAddressById(components, ZKConfigComponentID)
     ).getValue();
     if (zkConfig.open) {
-        uint256[4] memory input = [markInfo.seed, markInfo.perlin, markInfo.radius, markInfo.coordHash];
+        uint256[3] memory input = [markInfo.seed, markInfo.radius, markInfo.coordHash];
         require(
             IInitVerifier(zkConfig.initVerifyAddress).verifyProof(
                 markInfo.a,

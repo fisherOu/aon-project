@@ -2,8 +2,9 @@ pragma circom 2.0.0;
 
 /*
     Prove: I know (x,y,seed) such that:
-    - x <= r && y <= r
-    - MiMCSponge(x,y,seed) = pub
+    - x^2 + y^2 <= r^2
+    - perlin(x, y, seed) = p
+    - MiMCSponge(x,y) = pub
 */
 
 include "../../client/node_modules/circomlib/circuits/mimcsponge.circom";
@@ -15,6 +16,7 @@ template Main() {
     signal input x;
     signal input y;
     signal input seed;
+    signal input p;
     signal input r;
 
     signal output pub;
@@ -24,29 +26,39 @@ template Main() {
     rp.in[0] <== x;
     rp.in[1] <== y;
 
-    /* check x <= r && y <= r */
+    /* check x^2 + y^2 < r^2 */
     component comp = LessThan(32);
-    comp.in[0] <== x;
-    comp.in[1] <== r;
+    signal xSq;
+    signal ySq;
+    signal rSq;
+    xSq <== x * x;
+    ySq <== y * y;
+    rSq <== r * r;
+    comp.in[0] <== xSq + ySq;
+    comp.in[1] <== rSq;
     comp.out === 1;
-    component comp1 = LessThan(32);
-    comp1.in[0] <== y;
-    comp1.in[1] <== r;
-    comp1.out === 1;
 
-    /* check MiMCSponge(x,y,seed) = pub */
+    /* check MiMCSponge(x,y) = pub */
     /*
         220 = 2 * ceil(log_5 p), as specified by mimc paper, where
         p = 21888242871839275222246405745257275088548364400416034343698204186575808495617
     */
-    component mimc = MiMCSponge(3, 220, 1);
+    component mimc = MiMCSponge(2, 220, 1);
 
     mimc.ins[0] <== x;
     mimc.ins[1] <== y;
-    mimc.ins[2] <== seed;
     mimc.k <== 0;
 
     pub <== mimc.outs[0];
+
+    /* check perlin(x, y, seed) = p */
+    /*
+    component perlin = MultiScalePerlin(3);
+    perlin.p[0] <== x;
+    perlin.p[1] <== y;
+    perlin.p[2] <== seed;
+    p === perlin.out;
+    */
 }
 
-component main { public [seed, r] } = Main();
+component main { public [seed, p, r] } = Main();

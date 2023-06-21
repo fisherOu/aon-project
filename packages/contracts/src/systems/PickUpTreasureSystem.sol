@@ -22,7 +22,6 @@ uint256 constant ID = uint256(keccak256("system.PickUpTreasure"));
 
 struct PickUpInfo {
     uint256 coordHash;
-    uint256 perlin;
     uint256 radius;
     uint256 seed;
     uint256[2] a;
@@ -51,7 +50,7 @@ contract PickUpTreasureSystem is System {
             getAddressById(components, ZKConfigComponentID)
         ).getValue();
         if (zkConfig.open) {
-            uint256[4] memory input = [pickUpInfo.seed, pickUpInfo.perlin, pickUpInfo.radius, pickUpInfo.coordHash];
+            uint256[3] memory input = [pickUpInfo.seed, pickUpInfo.radius, pickUpInfo.coordHash];
             require(
                 IInitVerifier(zkConfig.initVerifyAddress).verifyProof(
                     pickUpInfo.a,
@@ -101,7 +100,7 @@ contract PickUpTreasureSystem is System {
         require(pickUpInfo.energy >= treasureConfig.energyMin && pickUpInfo.energy <= treasureConfig.energyMax, "energy over limit");
 
         // generate treasure properties
-        
+
         TreasureComponent(getAddressById(components, TreasureComponentID)).set(
             entityId,
             Treasure(pickUpInfo.energy, pickUpInfo.treasureType)
