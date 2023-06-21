@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 import {IWorld} from "solecs/interfaces/IWorld.sol";
-import {TreasureConfigComponent, ID as TreasureConfigComponentID, TreasureConfig, PropertyConfig} from "components/TreasureConfigComponent.sol";
+import {TreasureConfigComponent, ID as TreasureConfigComponentID, TreasureConfig, PropertyConfigRange, TreasureTypes} from "components/TreasureConfigComponent.sol";
 // import {MoveConfigComponent, ID as MoveConfigComponentID, MoveConfig} from "components/MoveConfigComponent.sol";
 // import {VisionConfigComponent, ID as VisionConfigComponentID, VisionConfig} from "components/VisionConfigComponent.sol";
 // import {TerrainComponent, ID as TerrainComponentID} from "components/TerrainComponent.sol";
