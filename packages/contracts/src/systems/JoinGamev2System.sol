@@ -18,7 +18,7 @@ import {MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown} from
 uint256 constant ID = uint256(keccak256("system.JoinGamev2"));
 
 struct JoinInfo {
-    uint256 coord_hash;
+    uint256 coordHash;
     uint256 perlin;
     uint256 radius;
     uint256 seed;
@@ -45,7 +45,7 @@ contract JoinGamev2System is System {
         //     getAddressById(components, ZkCheckComponentID)
         // );
         // if (zkCheck.getValue(SingletonID)) {
-        //     uint256[4] memory input = [joinInfo.coord_hash, joinInfo.perlin, joinInfo.radius, joinInfo.seed];
+        //     uint256[4] memory input = [joinInfo.coordHash, joinInfo.perlin, joinInfo.radius, joinInfo.seed];
         //     require(
         //         Verifier.verifyInitProof(
         //             joinInfo.a,
@@ -79,7 +79,7 @@ contract JoinGamev2System is System {
         player.set(entityId);
         HiddenPositionComponent(
             getAddressById(components, HiddenPositionComponentID)
-        ).set(entityId, joinInfo.coord_hash);
+        ).set(entityId, joinInfo.coordHash);
         // WarshipComponent
         // MoveCooldownComponent
         // uint256 warshipId = world.getUniqueEntityId();

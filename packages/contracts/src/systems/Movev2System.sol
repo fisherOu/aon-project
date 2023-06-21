@@ -62,13 +62,15 @@ contract Movev2System is System {
     require(moveInfo.radius <= mapConfig.gameRadiusX && moveInfo.radius <= mapConfig.gameRadiusY, "radius over limit");
 
     HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).set(entityId, moveInfo.coordHash);
-    uint64 remainPoints = movable.remainingMovePoints +
-      (uint64(block.timestamp) - movable.lastMoveTime) /
-      moveConfig.increaseCooldown -
-      1;
-    if (remainPoints > moveConfig.maxPoints) {
-      remainPoints = moveConfig.maxPoints;
+    if (distance > 1) {
+      uint64 remainPoints = movable.remainingMovePoints +
+        (uint64(block.timestamp) - movable.lastMoveTime) /
+        moveConfig.increaseCooldown -
+        1;
+      if (remainPoints > moveConfig.maxPoints) {
+        remainPoints = moveConfig.maxPoints;
+      }
+      moveCooldown.set(entityId, MoveCooldown(uint64(uint64(block.timestamp)), remainPoints));
     }
-    moveCooldown.set(entityId, MoveCooldown(uint64(uint64(block.timestamp)), remainPoints));
   }
 }
