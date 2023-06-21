@@ -52,6 +52,6 @@ contract ZKConfigComponent is BareComponent {
                 getRawValue(SingletonID),
                 (bool, address, address)
             );
-        return ZKConfig(open, initVerifyAddress, moveVerifyAddress, maxDistance);
+        return ZKConfig(open, initVerifyAddress, moveVerifyAddress);
     }
 }
