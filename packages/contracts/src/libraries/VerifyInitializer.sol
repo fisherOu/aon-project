@@ -11,7 +11,7 @@ library VerifyInitializer {
         );
         // don't set if not checking zk
         zkConfig.set(
-            ZKConfig({open: true, initVerifyAddress: 0xd3F8a21e3F0bc05460010219B63c841e7044221A, moveVerifyAddress: 0x78862A5ef7B4b3A3786614d3B7f05c600e389226})
+            ZKConfig({open: true, initVerifyAddress: 0x7799F7d25621fb541307D905640EC00f371C26da, moveVerifyAddress: 0x78862A5ef7B4b3A3786614d3B7f05c600e389226})
         );
     }
 }

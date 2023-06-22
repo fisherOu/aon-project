@@ -44,7 +44,7 @@ contract JoinGamev2System is System {
             getAddressById(components, ZKConfigComponentID)
         ).getValue();
         if (zkConfig.open) {
-            uint256[3] memory input = [joinInfo.seed, joinInfo.radius, joinInfo.coordHash];
+            uint256[3] memory input = [joinInfo.coordHash, joinInfo.seed, joinInfo.radius];
             require(
                 IInitVerifier(zkConfig.initVerifyAddress).verifyProof(
                     joinInfo.a,
