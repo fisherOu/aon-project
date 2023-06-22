@@ -34,9 +34,9 @@ contract MoveSystem is System {
         // );
         // require(movable.has(entityId), "cannot move");
 
-        // PositionComponent position = PositionComponent(
-        //     getAddressById(components, PositionComponentID)
-        // );
+        PositionComponent position = PositionComponent(
+            getAddressById(components, PositionComponentID)
+        );
         // require(
         //     LibMap.distance(position.getValue(entityId), coord) == 1,
         //     "can only move to adjacent spaces"
