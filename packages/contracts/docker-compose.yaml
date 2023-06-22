@@ -11,7 +11,7 @@ services:
       - -snapshot-block-interval=600
       - -initial-sync-block-batch-size=1000
       - -initial-sync-block-batch-sync-timeout=20
-      - -worldAddresses=0x93AC7D06A0c747301F5b6b0ec50CBEef818f19D1
+      - -worldAddresses=0xbb1f2EAc0652fEB39b4456995eAA24420E4eD0e6
       - -block=17363638
     ports:
       - "8547:8547"
