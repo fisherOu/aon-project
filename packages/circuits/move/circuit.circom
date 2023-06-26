@@ -19,7 +19,8 @@ template Main() {
     signal input y1;
     signal input x2;
     signal input y2;
-    signal input seed;
+    signal input seed1;
+    signal input seed2;
     signal input width;
     signal input height;
     signal input distMax;
@@ -66,20 +67,18 @@ template Main() {
         220 = 2 * ceil(log_5 p), as specified by mimc paper, where
         p = 21888242871839275222246405745257275088548364400416034343698204186575808495617
     */
-    component mimc1 = MiMCSponge(3, 220, 1);
-    component mimc2 = MiMCSponge(3, 220, 1);
+    component mimc1 = MiMCSponge(2, 220, 1);
+    component mimc2 = MiMCSponge(2, 220, 1);
 
     mimc1.ins[0] <== x1;
     mimc1.ins[1] <== y1;
-    mimc1.ins[2] <== seed;
-    mimc1.k <== 0;
+    mimc1.k <== seed1;
     mimc2.ins[0] <== x2;
     mimc2.ins[1] <== y2;
-    mimc2.ins[2] <== seed;
-    mimc2.k <== 0;
+    mimc2.k <== seed2;
 
     pub1 <== mimc1.outs[0];
     pub2 <== mimc2.outs[0];
 }
 
-component main { public [seed, width, height, distMax] } = Main();
+component main { public [seed1, seed2, width, height, distMax] } = Main();

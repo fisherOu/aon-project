@@ -24,8 +24,8 @@ contract ZKConfigComponent is BareComponent {
         override
         returns (string[] memory keys, LibTypes.SchemaValue[] memory values)
     {
-        keys = new string[](5);
-        values = new LibTypes.SchemaValue[](5);
+        keys = new string[](6);
+        values = new LibTypes.SchemaValue[](6);
 
         keys[0] = "open";
         values[0] = LibTypes.SchemaValue.BOOL;
