@@ -16,7 +16,7 @@ import {TreasureComponent, ID as TreasureComponentID, Treasure} from "components
 // import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
 // import {WarshipComponent, ID as WarshipComponentID, Warship} from "components/WarshipComponent.sol";
 // import {MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown} from "components/MoveCooldownComponent.sol";
-import {IInitVerifier} from "libraries/InitVerifier.sol";
+import {ITreasureVerifier} from "libraries/TreasureVerifier.sol";
 
 uint256 constant ID = uint256(keccak256("system.PickUpTreasure"));
 
@@ -55,7 +55,7 @@ contract PickUpTreasureSystem is System {
         if (zkConfig.open) {
             uint256[6] memory input = [pickUpInfo.coordHash, pickUpInfo.seed, pickUpInfo.treasureSeed, pickUpInfo.perlin, pickUpInfo.width, pickUpInfo.height];
             require(
-                IInitVerifier(zkConfig.treasureVerifyAddress).verifyProof(
+                ITreasureVerifier(zkConfig.treasureVerifyAddress).verifyProof(
                     pickUpInfo.a,
                     pickUpInfo.b,
                     pickUpInfo.c,
