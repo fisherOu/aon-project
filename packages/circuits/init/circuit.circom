@@ -15,7 +15,8 @@ template Main() {
     signal input x;
     signal input y;
     signal input seed;
-    signal input r;
+    signal input width;
+    signal input height;
 
     signal output pub;
 
@@ -24,14 +25,14 @@ template Main() {
     rp.in[0] <== x;
     rp.in[1] <== y;
 
-    /* check x <= r && y <= r */
+    /* check x < width && y < height */
     component comp = LessThan(32);
     comp.in[0] <== x;
-    comp.in[1] <== r;
+    comp.in[1] <== width;
     comp.out === 1;
     component comp1 = LessThan(32);
     comp1.in[0] <== y;
-    comp1.in[1] <== r;
+    comp1.in[1] <== height;
     comp1.out === 1;
 
     /* check MiMCSponge(x,y,seed) = pub */
@@ -49,4 +50,4 @@ template Main() {
     pub <== mimc.outs[0];
 }
 
-component main { public [seed, r] } = Main();
+component main { public [seed, width, height] } = Main();

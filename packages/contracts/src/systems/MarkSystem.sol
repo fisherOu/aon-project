@@ -10,14 +10,14 @@ import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components
 // import {SingletonID} from "solecs/SingletonID.sol";
 
 import { SpaceTimeMarkerComponent, ID as SpaceTimeMarkerComponentID, SpaceTimeMarker } from "components/SpaceTimeMarkerComponent.sol";
-import {IInitVerifier} from "libraries/InitVerifier.sol";
+import {IMarkVerifier} from "libraries/MarkVerifier.sol";
 
 uint256 constant ID = uint256(keccak256("system.Mark"));
 
 struct MarkInfo {
   uint256 coordHash;
-  uint256 radius;
-  uint256 seed;
+  uint256 width;
+  uint256 height;
   uint256 realHash;
   uint256 distance;
   uint256[2] a;
@@ -38,9 +38,9 @@ contract MarkSystem is System {
         getAddressById(components, ZKConfigComponentID)
     ).getValue();
     if (zkConfig.open) {
-        uint256[3] memory input = [markInfo.seed, markInfo.radius, markInfo.coordHash];
+        uint256[5] memory input = [markInfo.realHash, markInfo.coordHash, markInfo.width, markInfo.height, markInfo.distMax];
         require(
-            IInitVerifier(zkConfig.initVerifyAddress).verifyProof(
+            IMarkVerifier(zkConfig.markVerifyAddress).verifyProof(
                 markInfo.a,
                 markInfo.b,
                 markInfo.c,

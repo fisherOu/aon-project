@@ -22,8 +22,11 @@ uint256 constant ID = uint256(keccak256("system.PickUpTreasure"));
 
 struct PickUpInfo {
     uint256 coordHash;
-    uint256 radius;
+    uint256 width;
+    uint256 height;
     uint256 seed;
+    uint256 treasureSeed;
+    uint256 perlin;
     uint256[2] a;
     uint256[2][2] b;
     uint256[2] c;
@@ -50,9 +53,9 @@ contract PickUpTreasureSystem is System {
             getAddressById(components, ZKConfigComponentID)
         ).getValue();
         if (zkConfig.open) {
-            uint256[3] memory input = [pickUpInfo.seed, pickUpInfo.radius, pickUpInfo.coordHash];
+            uint256[6] memory input = [pickUpInfo.coordHash, pickUpInfo.seed, pickUpInfo.treasureSeed, pickUpInfo.perlin, pickUpInfo.width, pickUpInfo.height];
             require(
-                IInitVerifier(zkConfig.initVerifyAddress).verifyProof(
+                IInitVerifier(zkConfig.treasureVerifyAddress).verifyProof(
                     pickUpInfo.a,
                     pickUpInfo.b,
                     pickUpInfo.c,

@@ -20,8 +20,8 @@ template Main() {
     signal input x2;
     signal input y2;
     signal input seed;
-    signal input p2;
-    signal input r;
+    signal input width;
+    signal input height;
     signal input distMax;
 
     signal output pub1;
@@ -34,18 +34,16 @@ template Main() {
     rp.in[2] <== x2;
     rp.in[3] <== y2;
 
-    /* check x2^2 + y2^2 < r^2 */
+    /* check x < width && y < height */
 
-    component comp2 = LessThan(32);
-    signal x2Sq;
-    signal y2Sq;
-    signal rSq;
-    x2Sq <== x2 * x2;
-    y2Sq <== y2 * y2;
-    rSq <== r * r;
-    comp2.in[0] <== x2Sq + y2Sq;
-    comp2.in[1] <== rSq;
-    comp2.out === 1;
+    component comp = LessThan(32);
+    comp.in[0] <== x2;
+    comp.in[1] <== width;
+    comp.out === 1;
+    component comp1 = LessThan(32);
+    comp1.in[0] <== y2;
+    comp1.in[1] <== height;
+    comp1.out === 1;
 
     /* check (x1-x2)^2 + (y1-y2)^2 <= distMax^2 */
 
@@ -68,27 +66,20 @@ template Main() {
         220 = 2 * ceil(log_5 p), as specified by mimc paper, where
         p = 21888242871839275222246405745257275088548364400416034343698204186575808495617
     */
-    component mimc1 = MiMCSponge(2, 220, 1);
-    component mimc2 = MiMCSponge(2, 220, 1);
+    component mimc1 = MiMCSponge(3, 220, 1);
+    component mimc2 = MiMCSponge(3, 220, 1);
 
     mimc1.ins[0] <== x1;
     mimc1.ins[1] <== y1;
+    mimc1.ins[2] <== seed;
     mimc1.k <== 0;
     mimc2.ins[0] <== x2;
     mimc2.ins[1] <== y2;
+    mimc2.ins[2] <== seed;
     mimc2.k <== 0;
 
     pub1 <== mimc1.outs[0];
     pub2 <== mimc2.outs[0];
-
-    /* check perlin(x2, y2, seed) = p2 */
-    /*
-    component perlin = MultiScalePerlin(3);
-    perlin.p[0] <== x2;
-    perlin.p[1] <== y2;
-    perlin.p[2] <== seed;
-    perlin.out === p2;
-    */
 }
 
-component main { public [seed, p2, r, distMax] } = Main();
+component main { public [seed, width, height, distMax] } = Main();

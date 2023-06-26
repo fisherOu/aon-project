@@ -10,6 +10,9 @@ struct ZKConfig {
     bool open;
     address initVerifyAddress;
     address moveVerifyAddress;
+    address markVerifyAddress;
+    address treasureVerifyAddress;
+    address resourceVerifyAddress;
 }
 
 contract ZKConfigComponent is BareComponent {
@@ -21,8 +24,8 @@ contract ZKConfigComponent is BareComponent {
         override
         returns (string[] memory keys, LibTypes.SchemaValue[] memory values)
     {
-        keys = new string[](3);
-        values = new LibTypes.SchemaValue[](3);
+        keys = new string[](5);
+        values = new LibTypes.SchemaValue[](5);
 
         keys[0] = "open";
         values[0] = LibTypes.SchemaValue.BOOL;
@@ -32,6 +35,15 @@ contract ZKConfigComponent is BareComponent {
 
         keys[2] = "moveVerifyAddress";
         values[2] = LibTypes.SchemaValue.ADDRESS;
+
+        keys[3] = "markVerifyAddress";
+        values[3] = LibTypes.SchemaValue.ADDRESS;
+
+        keys[4] = "treasureVerifyAddress";
+        values[4] = LibTypes.SchemaValue.ADDRESS;
+
+        keys[5] = "resourceVerifyAddress";
+        values[5] = LibTypes.SchemaValue.ADDRESS;
     }
 
     function set(ZKConfig memory moveConfig) public {
@@ -40,7 +52,10 @@ contract ZKConfigComponent is BareComponent {
             abi.encode(
                 moveConfig.open,
                 moveConfig.initVerifyAddress,
-                moveConfig.moveVerifyAddress
+                moveConfig.moveVerifyAddress,
+                moveConfig.markVerifyAddress,
+                moveConfig.treasureVerifyAddress,
+                moveConfig.resourceVerifyAddress
             )
         );
     }
@@ -48,10 +63,13 @@ contract ZKConfigComponent is BareComponent {
     function getValue() public view returns (ZKConfig memory) {
         (bool open,
             address initVerifyAddress,
-            address moveVerifyAddress) = abi.decode(
+            address moveVerifyAddress,
+            address markVerifyAddress,
+            address treasureVerifyAddress,
+            address resourceVerifyAddress) = abi.decode(
                 getRawValue(SingletonID),
-                (bool, address, address)
+                (bool, address, address, address, address, address)
             );
-        return ZKConfig(open, initVerifyAddress, moveVerifyAddress);
+        return ZKConfig(open, initVerifyAddress, moveVerifyAddress, markVerifyAddress, treasureVerifyAddress, resourceVerifyAddress);
     }
 }

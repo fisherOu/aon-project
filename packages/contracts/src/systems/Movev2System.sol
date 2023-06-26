@@ -19,8 +19,8 @@ uint256 constant ID = uint256(keccak256("system.Movev2"));
 
 struct MoveInfo {
   uint256 coordHash;
-  uint256 perlin;
-  uint256 radius;
+  uint256 width;
+  uint256 height;
   uint256 seed;
   uint256 oldHash;
   uint256 distance;
@@ -42,7 +42,7 @@ contract Movev2System is System {
         getAddressById(components, ZKConfigComponentID)
     ).getValue();
     if (zkConfig.open) {
-        uint256[6] memory input = [moveInfo.seed, moveInfo.perlin, moveInfo.radius, moveInfo.distance, moveInfo.oldHash, moveInfo.coordHash];
+        uint256[6] memory input = [moveInfo.oldHash, moveInfo.coordHash, moveInfo.seed, moveInfo.width, moveInfo.height, moveInfo.distance];
         require(
             IMoveVerifier(zkConfig.moveVerifyAddress).verifyProof(
                 moveInfo.a,

@@ -19,7 +19,8 @@ uint256 constant ID = uint256(keccak256("system.JoinGamev2"));
 
 struct JoinInfo {
     uint256 coordHash;
-    uint256 radius;
+    uint256 width;
+    uint256 height;
     uint256 seed;
     uint256[2] a;
     uint256[2][2] b;
@@ -44,7 +45,7 @@ contract JoinGamev2System is System {
             getAddressById(components, ZKConfigComponentID)
         ).getValue();
         if (zkConfig.open) {
-            uint256[3] memory input = [joinInfo.coordHash, joinInfo.seed, joinInfo.radius];
+            uint256[4] memory input = [joinInfo.coordHash, joinInfo.seed, joinInfo.width, joinInfo.height];
             require(
                 IInitVerifier(zkConfig.initVerifyAddress).verifyProof(
                     joinInfo.a,
