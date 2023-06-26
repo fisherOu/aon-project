@@ -6,21 +6,21 @@ import { System, IWorld } from "solecs/System.sol";
 import { getAddressById } from "solecs/utils.sol";
 import { MapConfigv2Component, ID as MapConfigv2ComponentID, MapConfig } from "components/MapConfigv2Component.sol";
 import { MoveConfigComponent, ID as MoveConfigComponentID, MoveConfig } from "components/MoveConfigComponent.sol";
-import { ZkCheckComponent, ID as ZkCheckComponentID } from "components/ZkCheckComponent.sol";
-import { SingletonID } from "solecs/SingletonID.sol";
+import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components/ZKConfigComponent.sol";
+// import {SingletonID} from "solecs/SingletonID.sol";
 
 import { PlayerComponent, ID as PlayerComponentID } from "components/PlayerComponent.sol";
 import { HiddenPositionComponent, ID as HiddenPositionComponentID } from "components/HiddenPositionComponent.sol";
 import { WarshipComponent, ID as WarshipComponentID, Warship } from "components/WarshipComponent.sol";
 import { MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown } from "components/MoveCooldownComponent.sol";
-// import { Verifier } from "libraries/Verifier.sol";
+import {IMoveVerifier} from "libraries/MoveVerifier.sol";
 
 uint256 constant ID = uint256(keccak256("system.Movev2"));
 
 struct MoveInfo {
   uint256 coordHash;
-  uint256 perlin;
-  uint256 radius;
+  uint256 width;
+  uint256 height;
   uint256 seed;
   uint256 oldHash;
   uint256 distance;
@@ -38,11 +38,21 @@ contract Movev2System is System {
   }
 
   function executeTyped(MoveInfo memory moveInfo) public returns (bytes memory) {
-    // ZkCheckComponent zkCheck = ZkCheckComponent(getAddressById(components, ZkCheckComponentID));
-    // if (zkCheck.getValue(SingletonID)) {
-    //   uint256[6] memory input = [moveInfo.coordHash, moveInfo.perlin, moveInfo.radius, moveInfo.seed, moveInfo.oldHash, moveInfo.distance];
-    //   require(Verifier.verifyMoveProof(moveInfo.a, moveInfo.b, moveInfo.c, input), "Failed move proof check");
-    // }
+    ZKConfig memory zkConfig = ZKConfigComponent(
+        getAddressById(components, ZKConfigComponentID)
+    ).getValue();
+    if (zkConfig.open) {
+        uint256[6] memory input = [moveInfo.oldHash, moveInfo.coordHash, moveInfo.seed, moveInfo.width, moveInfo.height, moveInfo.distance];
+        require(
+            IMoveVerifier(zkConfig.moveVerifyAddress).verifyProof(
+                moveInfo.a,
+                moveInfo.b,
+                moveInfo.c,
+                input
+            ),
+            "Failed pickup proof check"
+        );
+    }
     uint256 entityId = addressToEntity(msg.sender);
 
     PlayerComponent player = PlayerComponent(getAddressById(components, PlayerComponentID));
@@ -59,16 +69,18 @@ contract Movev2System is System {
 
     // Constrain position to map size, wrapping around if necessary
     MapConfig memory mapConfig = MapConfigv2Component(getAddressById(components, MapConfigv2ComponentID)).getValue();
-    require(moveInfo.radius <= mapConfig.gameRadiusX && moveInfo.radius <= mapConfig.gameRadiusY, "radius over limit");
+    require(moveInfo.width <= mapConfig.gameRadiusX && moveInfo.height <= mapConfig.gameRadiusY, "radius over limit");
 
     HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).set(entityId, moveInfo.coordHash);
-    uint64 remainPoints = movable.remainingMovePoints +
-      (uint64(block.timestamp) - movable.lastMoveTime) /
-      moveConfig.increaseCooldown -
-      1;
-    if (remainPoints > moveConfig.maxPoints) {
-      remainPoints = moveConfig.maxPoints;
+    if (moveInfo.distance > 1) {
+      uint64 remainPoints = movable.remainingMovePoints +
+        (uint64(block.timestamp) - movable.lastMoveTime) /
+        moveConfig.increaseCooldown -
+        1;
+      if (remainPoints > moveConfig.maxPoints) {
+        remainPoints = moveConfig.maxPoints;
+      }
+      moveCooldown.set(entityId, MoveCooldown(uint64(uint64(block.timestamp)), remainPoints));
     }
-    moveCooldown.set(entityId, MoveCooldown(uint64(uint64(block.timestamp)), remainPoints));
   }
 }

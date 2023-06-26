@@ -29,23 +29,23 @@ contract MoveSystem is System {
     function executeTyped(Coord memory coord) public returns (bytes memory) {
         uint256 entityId = addressToEntity(msg.sender);
 
-        MovableComponent movable = MovableComponent(
-            getAddressById(components, MovableComponentID)
-        );
-        require(movable.has(entityId), "cannot move");
+        // MovableComponent movable = MovableComponent(
+        //     getAddressById(components, MovableComponentID)
+        // );
+        // require(movable.has(entityId), "cannot move");
 
         PositionComponent position = PositionComponent(
             getAddressById(components, PositionComponentID)
         );
-        require(
-            LibMap.distance(position.getValue(entityId), coord) == 1,
-            "can only move to adjacent spaces"
-        );
+        // require(
+        //     LibMap.distance(position.getValue(entityId), coord) == 1,
+        //     "can only move to adjacent spaces"
+        // );
 
-        EncounterComponent encounter = EncounterComponent(
-            getAddressById(components, EncounterComponentID)
-        );
-        require(!encounter.has(entityId), "cannot move during an encounter");
+        // EncounterComponent encounter = EncounterComponent(
+        //     getAddressById(components, EncounterComponentID)
+        // );
+        // require(!encounter.has(entityId), "cannot move during an encounter");
 
         // Constrain position to map size, wrapping around if necessary
         MapConfig memory mapConfig = MapConfigComponent(
@@ -54,29 +54,29 @@ contract MoveSystem is System {
         coord.x = (coord.x + int32(mapConfig.width)) % int32(mapConfig.width);
         coord.y = (coord.y + int32(mapConfig.height)) % int32(mapConfig.height);
 
-        require(
-            LibMap.obstructions(world, coord).length == 0,
-            "this space is obstructed"
-        );
+        // require(
+        //     LibMap.obstructions(world, coord).length == 0,
+        //     "this space is obstructed"
+        // );
 
         position.set(entityId, coord);
 
-        if (canTriggerEncounter(entityId, coord)) {
-            // 20% chance to trigger encounter
-            uint256 rand = uint256(
-                keccak256(
-                    abi.encode(
-                        ++entropyNonce,
-                        entityId,
-                        coord,
-                        block.difficulty
-                    )
-                )
-            );
-            if (rand % 5 == 0) {
-                startEncounter(entityId);
-            }
-        }
+        // if (canTriggerEncounter(entityId, coord)) {
+        //     // 20% chance to trigger encounter
+        //     uint256 rand = uint256(
+        //         keccak256(
+        //             abi.encode(
+        //                 ++entropyNonce,
+        //                 entityId,
+        //                 coord,
+        //                 block.difficulty
+        //             )
+        //         )
+        //     );
+        //     if (rand % 5 == 0) {
+        //         startEncounter(entityId);
+        //     }
+        // }
     }
 
     function canTriggerEncounter(
