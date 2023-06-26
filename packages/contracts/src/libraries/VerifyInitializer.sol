@@ -11,7 +11,7 @@ library VerifyInitializer {
         );
         // don't set if not checking zk
         zkConfig.set(
-            ZKConfig({open: true, initVerifyAddress: 0x7799F7d25621fb541307D905640EC00f371C26da, moveVerifyAddress: 0x78862A5ef7B4b3A3786614d3B7f05c600e389226, markVerifyAddress: 0x78862A5ef7B4b3A3786614d3B7f05c600e389226, treasureVerifyAddress: 0x78862A5ef7B4b3A3786614d3B7f05c600e389226, resourceVerifyAddress: 0x78862A5ef7B4b3A3786614d3B7f05c600e389226})
+            ZKConfig({open: true, initVerifyAddress: 0x44E4cE6FBbB74b97ED410918FE078FF96FCC3e59, moveVerifyAddress: 0x8B8771931eFC48E8968a493a1CbaB5792dC1b28A, markVerifyAddress: 0x887aBd88AF9cb61E31A1c2e78354f4e4cF9496e9, treasureVerifyAddress: 0x32Ac23C5DAa44437726A529B695aCa575986eD7a, resourceVerifyAddress: 0x9a961BE9bED3C9a225c3035954D42C9B3957d7d7})
         );
     }
 }
