@@ -52,7 +52,7 @@ contract MarkSystem is System {
 
     // Constrain position to map size, wrapping around if necessary
     MapConfig memory mapConfig = MapConfigv2Component(getAddressById(components, MapConfigv2ComponentID)).getValue();
-    require(markInfo.radius <= mapConfig.gameRadiusX && markInfo.radius <= mapConfig.gameRadiusY, "radius over limit");
+    require(markInfo.width <= mapConfig.gameRadiusX && markInfo.height <= mapConfig.gameRadiusY, "radius over limit");
 
     VisionConfig memory visionConfig = VisionConfigComponent(getAddressById(components, VisionConfigComponentID))
       .getValue();

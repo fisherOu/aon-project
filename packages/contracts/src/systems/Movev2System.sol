@@ -69,7 +69,7 @@ contract Movev2System is System {
 
     // Constrain position to map size, wrapping around if necessary
     MapConfig memory mapConfig = MapConfigv2Component(getAddressById(components, MapConfigv2ComponentID)).getValue();
-    require(moveInfo.radius <= mapConfig.gameRadiusX && moveInfo.radius <= mapConfig.gameRadiusY, "radius over limit");
+    require(moveInfo.width <= mapConfig.gameRadiusX && moveInfo.height <= mapConfig.gameRadiusY, "radius over limit");
 
     HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).set(entityId, moveInfo.coordHash);
     if (moveInfo.distance > 1) {

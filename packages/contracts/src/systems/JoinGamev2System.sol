@@ -68,8 +68,8 @@ contract JoinGamev2System is System {
             getAddressById(components, MapConfigv2ComponentID)
         ).getValue();
         require(
-            joinInfo.radius <= mapConfig.gameRadiusX &&
-                joinInfo.radius <= mapConfig.gameRadiusY,
+            joinInfo.width <= mapConfig.gameRadiusX &&
+                joinInfo.height <= mapConfig.gameRadiusY,
             "radius over limit"
         );
         MoveConfig memory moveConfig = MoveConfigComponent(

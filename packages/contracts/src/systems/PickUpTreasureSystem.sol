@@ -71,8 +71,8 @@ contract PickUpTreasureSystem is System {
             getAddressById(components, MapConfigv2ComponentID)
         ).getValue();
         require(
-            pickUpInfo.radius <= mapConfig.gameRadiusX &&
-                pickUpInfo.radius <= mapConfig.gameRadiusY,
+            pickUpInfo.width <= mapConfig.gameRadiusX &&
+                pickUpInfo.height <= mapConfig.gameRadiusY,
             "radius over limit"
         );
         require(
