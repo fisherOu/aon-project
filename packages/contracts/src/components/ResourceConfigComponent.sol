@@ -38,7 +38,7 @@ contract ResourceConfigComponent is BareComponent {
   }
 
   function getValue() public view returns (ResourceConfig memory) {
-    (uint256 valueMax, uint256 valueMin, uint8 memory difficultMax, uint8 memory difficultMin) = abi.decode(getRawValue(SingletonID), (uint256, uint256, uint8, uint8));
+    (uint256 valueMax, uint256 valueMin, uint8 difficultMax, uint8 difficultMin) = abi.decode(getRawValue(SingletonID), (uint256, uint256, uint8, uint8));
     return ResourceConfig(valueMax, valueMin, difficultMax, difficultMin);
   }
 }
