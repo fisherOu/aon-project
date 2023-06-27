@@ -97,7 +97,7 @@ library MapConfigv2Initializer {
         moveConfig.set(
             MoveConfig({
                 initPoints: 5,
-                increaseCooldown: 12 * 60 * 60 * 1000,
+                increaseCooldown: 1 * 60 * 60 * 1000,
                 maxPoints: 10,
                 maxDistance: 20
             })
