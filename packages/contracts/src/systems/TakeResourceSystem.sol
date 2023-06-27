@@ -100,7 +100,7 @@ contract TakeResourceSystem is System {
         ResourceMiningComponent resourceMining = ResourceMiningComponent(
             getAddressById(components, ResourceMiningComponentID)
         );
-        (uint256 remain, uint256 cache, uint256 difficulty) = getRemainAndCache(resourceId);
+        (uint256 remain, uint256 cache, uint256 difficulty) = getRemainAndCache(resourceId, takeInfo.perlin);
         require(remain == takeInfo.remain && cache == takeInfo.cache, "remain value invalid");
         if (cache >= 0) {
             GoldAmountComponent goldAmount = GoldAmountComponent(
