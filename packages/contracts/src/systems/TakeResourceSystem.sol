@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["ResourcePositionComponent"]
+// components: ["GoldAmountComponent", "ResourceMiningComponent", "ResourceComponent", "ResourcePositionComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
@@ -93,6 +93,7 @@ contract TakeResourceSystem is System {
         }
         if (resourceId == 0) {
             resourceId = world.getUniqueEntityId();
+            resourcePosition.set(resourceId, digInfo.coordHash);
         }
         // ResourceComponent resource = ResourceComponent(
         //     getAddressById(components, ResourceComponentID)

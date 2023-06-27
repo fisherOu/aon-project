@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["ResourcePositionComponent"]
+// components: ["ResourcePositionComponent", "TreasureComponent", "PlayerBelongingComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
