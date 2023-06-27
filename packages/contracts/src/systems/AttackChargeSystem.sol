@@ -30,6 +30,7 @@ struct AttackChargeInfo {
     uint256[2] c;
     uint256 direction;
     uint256 realHash;
+    uint256 perlin;
 }
 
 contract AttackChargeSystem is System {
