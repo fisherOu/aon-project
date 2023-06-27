@@ -19,9 +19,9 @@ import {GoldAmountComponent, ID as GoldAmountComponentID} from "components/GoldA
 // import {MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown} from "components/MoveCooldownComponent.sol";
 import {IResourceVerifier} from "libraries/ResourceVerifier.sol";
 
-uint256 constant ID = uint256(keccak256("system.DigResource"));
+uint256 constant ID = uint256(keccak256("system.TakeResource"));
 
-struct DigInfo {
+struct TakeInfo {
     uint256 coordHash;
     uint256 width;
     uint256 height;
@@ -35,58 +35,58 @@ struct DigInfo {
     uint256 cache;
 }
 
-contract DigResourceSystem is System {
+contract TakeResourceSystem is System {
     constructor(
         IWorld _world,
         address _components
     ) System(_world, _components) {}
 
     function execute(bytes memory args) public returns (bytes memory) {
-        DigInfo memory digInfo = abi.decode(args, (DigInfo));
-        return executeTyped(digInfo);
+        TakeInfo memory takeInfo = abi.decode(args, (TakeInfo));
+        return executeTyped(takeInfo);
     }
 
     function executeTyped(
-        DigInfo memory digInfo
+        TakeInfo memory takeInfo
     ) public returns (bytes memory) {
         ZKConfig memory zkConfig = ZKConfigComponent(
             getAddressById(components, ZKConfigComponentID)
         ).getValue();
         if (zkConfig.open) {
-            uint256[6] memory input = [digInfo.coordHash, digInfo.seed, digInfo.resourceSeed, digInfo.perlin, digInfo.width, digInfo.height];
+            uint256[6] memory input = [takeInfo.coordHash, takeInfo.seed, takeInfo.resourceSeed, takeInfo.perlin, takeInfo.width, takeInfo.height];
             require(
                 IResourceVerifier(zkConfig.resourceVerifyAddress).verifyProof(
-                    digInfo.a,
-                    digInfo.b,
-                    digInfo.c,
+                    takeInfo.a,
+                    takeInfo.b,
+                    takeInfo.c,
                     input
                 ),
                 "Failed resource proof check"
             );
         }
         uint256 entityId = addressToEntity(msg.sender);
-        require(coordHash == HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).getValue(entityId), "not standing on resource");
+        require(takeInfo.coordHash == HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).getValue(entityId), "not standing on resource");
 
         // Constrain position to map size, wrapping around if necessary
         MapConfig memory mapConfig = MapConfigv2Component(
             getAddressById(components, MapConfigv2ComponentID)
         ).getValue();
         require(
-            digInfo.width <= mapConfig.gameRadiusX &&
-                digInfo.height <= mapConfig.gameRadiusY,
+            takeInfo.width <= mapConfig.gameRadiusX &&
+                takeInfo.height <= mapConfig.gameRadiusY,
             "radius over limit"
         );
         require(
             // hash <= resourceDifficulty <= resourceDifficulty || resourceDifficulty < hash <= resourceDifficulty
-            (digInfo.coordHash <= mapConfig.resourceDifficulty &&
-                mapConfig.resourceDifficulty <= mapConfig.resourceDifficulty) || (digInfo.coordHash <= mapConfig.resourceDifficulty &&
-                digInfo.coordHash > mapConfig.resourceDifficulty),
-            "no resource to dig"
+            (takeInfo.coordHash <= mapConfig.resourceDifficulty &&
+                mapConfig.resourceDifficulty <= mapConfig.resourceDifficulty) || (takeInfo.coordHash <= mapConfig.resourceDifficulty &&
+                takeInfo.coordHash > mapConfig.resourceDifficulty),
+            "no resource to take"
         );
         ResourcePositionComponent resourcePosition = ResourcePositionComponent(
             getAddressById(components, ResourcePositionComponentID)
         );
-        uint256[] memory resourceIds =  resourcePosition.getEntitiesWithValue(digInfo.coordHash);
+        uint256[] memory resourceIds =  resourcePosition.getEntitiesWithValue(takeInfo.coordHash);
         uint256 resourceId = 0;
         if (resourceIds.length > 0) {
             resourceId = resourceIds[0];
@@ -101,7 +101,7 @@ contract DigResourceSystem is System {
             getAddressById(components, ResourceMiningComponentID)
         );
         (uint256 remain, uint256 cache, uint256 difficulty) = getRemainAndCache(resourceId);
-        require(remain == digInfo.remain && cache == digInfo.cache, "remain value invalid");
+        require(remain == takeInfo.remain && cache == takeInfo.cache, "remain value invalid");
         if (cache >= 0) {
             GoldAmountComponent goldAmount = GoldAmountComponent(
                 getAddressById(components, GoldAmountComponentID)
@@ -134,8 +134,8 @@ contract DigResourceSystem is System {
             ResourceConfig memory resourceConfig = ResourceConfigComponent(
                 getAddressById(components, ResourceConfigComponentID)
             ).getValue();
-            uint256 value = digInfo.perlin % (resourceConfig.valueMax - resourceConfig.valueMin) + resourceConfig.valueMin;
-            difficulty = uint8(digInfo.perlin / (resourceConfig.valueMax - resourceConfig.valueMin)) % (resourceConfig.difficultMax - resourceConfig.difficultMin) + resourceConfig.difficultMin;
+            uint256 value = takeInfo.perlin % (resourceConfig.valueMax - resourceConfig.valueMin) + resourceConfig.valueMin;
+            difficulty = uint8(takeInfo.perlin / (resourceConfig.valueMax - resourceConfig.valueMin)) % (resourceConfig.difficultMax - resourceConfig.difficultMin) + resourceConfig.difficultMin;
             resource.set(resourceId, Resource({value: value, difficulty: difficulty}));
             remain = value;
         }

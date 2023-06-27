@@ -16,7 +16,7 @@ import {ResourceComponent, ID as ResourceComponentID, Resource} from "components
 import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
 // import {WarshipComponent, ID as WarshipComponentID, Warship} from "components/WarshipComponent.sol";
 // import {MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown} from "components/MoveCooldownComponent.sol";
-import {IInitVerifier} from "libraries/InitVerifier.sol";
+import {IResourceVerifier} from "libraries/ResourceVerifier.sol";
 
 uint256 constant ID = uint256(keccak256("system.AttackCharge"));
 
@@ -39,51 +39,51 @@ contract AttackChargeSystem is System {
     ) System(_world, _components) {}
 
     function execute(bytes memory args) public returns (bytes memory) {
-        AttackChargeInfo memory digInfo = abi.decode(args, (AttackChargeInfo));
-        return executeTyped(digInfo);
+        AttackChargeInfo memory attackInfo = abi.decode(args, (AttackChargeInfo));
+        return executeTyped(attackInfo);
     }
 
     function executeTyped(
-        AttackChargeInfo memory digInfo
+        AttackChargeInfo memory attackInfo
     ) public returns (bytes memory) {
         ZKConfig memory zkConfig = ZKConfigComponent(
             getAddressById(components, ZKConfigComponentID)
         ).getValue();
         if (zkConfig.open) {
-            uint256[6] memory input = [digInfo.coordHash, digInfo.seed, digInfo.resourceSeed, digInfo.perlin, digInfo.width, digInfo.height];
+            uint256[6] memory input = [attackInfo.coordHash, attackInfo.seed, attackInfo.resourceSeed, attackInfo.perlin, attackInfo.width, attackInfo.height];
             require(
                 IResourceVerifier(zkConfig.resourceVerifyAddress).verifyProof(
-                    digInfo.a,
-                    digInfo.b,
-                    digInfo.c,
+                    attackInfo.a,
+                    attackInfo.b,
+                    attackInfo.c,
                     input
                 ),
                 "Failed resource proof check"
             );
         }
         uint256 entityId = addressToEntity(msg.sender);
-        require(coordHash == HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).getValue(entityId), "not standing on resource");
+        require(attackInfo.coordHash == HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).getValue(entityId), "not standing on resource");
 
         // Constrain position to map size, wrapping around if necessary
         MapConfig memory mapConfig = MapConfigv2Component(
             getAddressById(components, MapConfigv2ComponentID)
         ).getValue();
         require(
-            digInfo.width <= mapConfig.gameRadiusX &&
-                digInfo.height <= mapConfig.gameRadiusY,
+            attackInfo.width <= mapConfig.gameRadiusX &&
+                attackInfo.height <= mapConfig.gameRadiusY,
             "radius over limit"
         );
         require(
             // hash <= resourceDifficulty <= resourceDifficulty || resourceDifficulty < hash <= resourceDifficulty
-            (digInfo.coordHash <= mapConfig.resourceDifficulty &&
-                mapConfig.resourceDifficulty <= mapConfig.resourceDifficulty) || (digInfo.coordHash <= mapConfig.resourceDifficulty &&
-                digInfo.coordHash > mapConfig.resourceDifficulty),
+            (attackInfo.coordHash <= mapConfig.resourceDifficulty &&
+                mapConfig.resourceDifficulty <= mapConfig.resourceDifficulty) || (attackInfo.coordHash <= mapConfig.resourceDifficulty &&
+                attackInfo.coordHash > mapConfig.resourceDifficulty),
             "no resource to dig"
         );
         ResourcePositionComponent resourcePosition = ResourcePositionComponent(
             getAddressById(components, ResourcePositionComponentID)
         );
-        uint256[] memory resourceIds =  resourcePosition.getEntitiesWithValue(digInfo.coordHash);
+        uint256[] memory resourceIds =  resourcePosition.getEntitiesWithValue(attackInfo.coordHash);
         uint256 resourceId = 0;
         if (resourceIds.length > 0) {
             resourceId = resourceIds[0];
@@ -98,8 +98,8 @@ contract AttackChargeSystem is System {
             getAddressById(components, ResourceMiningComponentID)
         );
         (uint256 remain, uint256 cache, uint256 difficulty) = getRemainAndCache(resourceId);
-        require(remain == digInfo.remain && cache == digInfo.cache, "remain value invalid");
-        require(digInfo.powResult / 16 	** (64 - difficulty) == 0, "pow value invalid");
+        require(remain == attackInfo.remain && cache == attackInfo.cache, "remain value invalid");
+        require(attackInfo.powResult / 16 	** (64 - difficulty) == 0, "pow value invalid");
         resourceMining.set(resourceId, ResourceMining({remain: remain-1, cache: cache+1}));
     }
 
@@ -123,8 +123,8 @@ contract AttackChargeSystem is System {
             ResourceConfig memory resourceConfig = ResourceConfigComponent(
                 getAddressById(components, ResourceConfigComponentID)
             ).getValue();
-            uint256 value = digInfo.perlin % (resourceConfig.valueMax - resourceConfig.valueMin) + resourceConfig.valueMin;
-            difficulty = uint8(digInfo.perlin / (resourceConfig.valueMax - resourceConfig.valueMin)) % (resourceConfig.difficultMax - resourceConfig.difficultMin) + resourceConfig.difficultMin;
+            uint256 value = attackInfo.perlin % (resourceConfig.valueMax - resourceConfig.valueMin) + resourceConfig.valueMin;
+            difficulty = uint8(attackInfo.perlin / (resourceConfig.valueMax - resourceConfig.valueMin)) % (resourceConfig.difficultMax - resourceConfig.difficultMin) + resourceConfig.difficultMin;
             resource.set(resourceId, Resource({value: value, difficulty: difficulty}));
             remain = value;
         }

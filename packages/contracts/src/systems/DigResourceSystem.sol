@@ -65,7 +65,7 @@ contract DigResourceSystem is System {
             );
         }
         uint256 entityId = addressToEntity(msg.sender);
-        require(coordHash == HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).getValue(entityId), "not standing on resource");
+        require(digInfo.coordHash == HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).getValue(entityId), "not standing on resource");
 
         // Constrain position to map size, wrapping around if necessary
         MapConfig memory mapConfig = MapConfigv2Component(
