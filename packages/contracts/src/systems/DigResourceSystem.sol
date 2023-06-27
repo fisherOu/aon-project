@@ -93,7 +93,6 @@ contract DigResourceSystem is System {
         }
         if (resourceId == 0) {
             resourceId = world.getUniqueEntityId();
-            resourcePosition.set(resourceId, digInfo.coordHash);
         }
         // ResourceComponent resource = ResourceComponent(
         //     getAddressById(components, ResourceComponentID)
@@ -104,6 +103,7 @@ contract DigResourceSystem is System {
         (uint256 remain, uint256 cache, uint256 difficulty) = getRemainAndCache(resourceId, digInfo.perlin);
         require(remain == digInfo.remain && cache == digInfo.cache, "remain value invalid");
         require(digInfo.powResult / 16 	** (64 - difficulty) == 0, "pow value invalid");
+        resourcePosition.set(resourceId, digInfo.coordHash);
         resourceMining.set(resourceId, ResourceMining({remain: remain-1, cache: cache+1}));
     }
 

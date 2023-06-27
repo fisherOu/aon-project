@@ -93,7 +93,6 @@ contract TakeResourceSystem is System {
         }
         if (resourceId == 0) {
             resourceId = world.getUniqueEntityId();
-            resourcePosition.set(resourceId, digInfo.coordHash);
         }
         // ResourceComponent resource = ResourceComponent(
         //     getAddressById(components, ResourceComponentID)
@@ -103,6 +102,7 @@ contract TakeResourceSystem is System {
         );
         (uint256 remain, uint256 cache, uint256 difficulty) = getRemainAndCache(resourceId, takeInfo.perlin);
         require(remain == takeInfo.remain && cache == takeInfo.cache, "remain value invalid");
+        resourcePosition.set(resourceId, takeInfo.coordHash);
         if (cache >= 0) {
             GoldAmountComponent goldAmount = GoldAmountComponent(
                 getAddressById(components, GoldAmountComponentID)
