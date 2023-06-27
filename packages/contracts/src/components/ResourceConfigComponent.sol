@@ -13,7 +13,7 @@ struct ResourceConfig {
   uint8 difficultMin;
 }
 
-contract TreasureConfigComponent is BareComponent {
+contract ResourceConfigComponent is BareComponent {
   constructor(address world) BareComponent(world, ID) {}
 
   function getSchema() public pure override returns (string[] memory keys, LibTypes.SchemaValue[] memory values) {
@@ -33,12 +33,12 @@ contract TreasureConfigComponent is BareComponent {
     values[3] = LibTypes.SchemaValue.UINT8;
   }
 
-  function set(TreasureConfig memory resourceConfig) public {
+  function set(ResourceConfig memory resourceConfig) public {
     set(SingletonID, abi.encode(resourceConfig.valueMax, resourceConfig.valueMin, resourceConfig.difficultMax, resourceConfig.difficultMin));
   }
 
-  function getValue() public view returns (TreasureConfig memory) {
+  function getValue() public view returns (ResourceConfig memory) {
     (uint256 valueMax, uint256 valueMin, uint8 memory difficultMax, uint8 memory difficultMin) = abi.decode(getRawValue(SingletonID), (uint256, uint256, uint8, uint8));
-    return TreasureConfig(valueMax, valueMin, difficultMax, difficultMin);
+    return ResourceConfig(valueMax, valueMin, difficultMax, difficultMin);
   }
 }
