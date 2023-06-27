@@ -104,7 +104,7 @@ contract AttackChargeSystem is System {
         resourceMining.set(resourceId, ResourceMining({remain: remain-1, cache: cache+1}));
     }
 
-    function getRemainAndCache(uint256 resourceId) internal returns (uint256 remain, uint256 cache, uint256 difficulty) {
+    function getRemainAndCache(uint256 resourceId, uint256 perlin) internal returns (uint256 remain, uint256 cache, uint256 difficulty) {
         ResourceComponent resource = ResourceComponent(
             getAddressById(components, ResourceComponentID)
         );
@@ -124,8 +124,8 @@ contract AttackChargeSystem is System {
             ResourceConfig memory resourceConfig = ResourceConfigComponent(
                 getAddressById(components, ResourceConfigComponentID)
             ).getValue();
-            uint256 value = attackInfo.perlin % (resourceConfig.valueMax - resourceConfig.valueMin) + resourceConfig.valueMin;
-            difficulty = uint8(attackInfo.perlin / (resourceConfig.valueMax - resourceConfig.valueMin)) % (resourceConfig.difficultMax - resourceConfig.difficultMin) + resourceConfig.difficultMin;
+            uint256 value = perlin % (resourceConfig.valueMax - resourceConfig.valueMin) + resourceConfig.valueMin;
+            difficulty = uint8(perlin / (resourceConfig.valueMax - resourceConfig.valueMin)) % (resourceConfig.difficultMax - resourceConfig.difficultMin) + resourceConfig.difficultMin;
             resource.set(resourceId, Resource({value: value, difficulty: difficulty}));
             remain = value;
         }

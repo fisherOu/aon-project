@@ -114,7 +114,7 @@ contract TakeResourceSystem is System {
         }
     }
 
-    function getRemainAndCache(uint256 resourceId) internal returns (uint256 remain, uint256 cache, uint256 difficulty) {
+    function getRemainAndCache(uint256 resourceId, uint256 perlin) internal returns (uint256 remain, uint256 cache, uint256 difficulty) {
         ResourceComponent resource = ResourceComponent(
             getAddressById(components, ResourceComponentID)
         );
@@ -134,8 +134,8 @@ contract TakeResourceSystem is System {
             ResourceConfig memory resourceConfig = ResourceConfigComponent(
                 getAddressById(components, ResourceConfigComponentID)
             ).getValue();
-            uint256 value = takeInfo.perlin % (resourceConfig.valueMax - resourceConfig.valueMin) + resourceConfig.valueMin;
-            difficulty = uint8(takeInfo.perlin / (resourceConfig.valueMax - resourceConfig.valueMin)) % (resourceConfig.difficultMax - resourceConfig.difficultMin) + resourceConfig.difficultMin;
+            uint256 value = perlin % (resourceConfig.valueMax - resourceConfig.valueMin) + resourceConfig.valueMin;
+            difficulty = uint8(perlin / (resourceConfig.valueMax - resourceConfig.valueMin)) % (resourceConfig.difficultMax - resourceConfig.difficultMin) + resourceConfig.difficultMin;
             resource.set(resourceId, Resource({value: value, difficulty: difficulty}));
             remain = value;
         }
