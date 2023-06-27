@@ -103,7 +103,7 @@ contract PickUpTreasureSystem is System {
         require(pickUpInfo.energy >= treasureConfig.energyMin && pickUpInfo.energy <= treasureConfig.energyMax, "energy over limit");
 
         // generate treasure properties
-        resourcePosition.set(treasureId, pickUpInfo.coordHash)
+        resourcePosition.set(treasureId, pickUpInfo.coordHash);
 
         TreasureComponent(getAddressById(components, TreasureComponentID)).set(
             entityId,
