@@ -114,7 +114,7 @@ contract TakeResourceSystem is System {
         }
     }
 
-    function getRemainAndCache(uint256 resourceId, uint256 perlin) internal returns (uint256 remain, uint256 cache, uint256 difficulty) {
+    function getRemainAndCache(uint256 resourceId, uint256 perlin) internal returns (uint256 remain, uint256 cache, uint256 diff) {
         ResourceComponent resource = ResourceComponent(
             getAddressById(components, ResourceComponentID)
         );
@@ -123,9 +123,9 @@ contract TakeResourceSystem is System {
         );
         remain = 0;
         cache = 0;
-        difficulty = 0;
+        diff = 0;
         if (resourceMining.has(resourceId)) {
-            difficulty = resource.getValue(resourceId).difficuly;
+            diff = resource.getValue(resourceId).diff;
             ResourceMining memory miningState = resourceMining.getValue(resourceId);
             remain = miningState.remain;
             cache = miningState.cache;
@@ -135,10 +135,10 @@ contract TakeResourceSystem is System {
                 getAddressById(components, ResourceConfigComponentID)
             ).getValue();
             uint256 value = perlin % (resourceConfig.valueMax - resourceConfig.valueMin) + resourceConfig.valueMin;
-            difficulty = uint8(perlin / (resourceConfig.valueMax - resourceConfig.valueMin)) % (resourceConfig.difficultMax - resourceConfig.difficultMin) + resourceConfig.difficultMin;
-            resource.set(resourceId, Resource({value: value, difficulty: difficulty}));
+            diff = uint8(perlin / (resourceConfig.valueMax - resourceConfig.valueMin)) % (resourceConfig.difficultMax - resourceConfig.difficultMin) + resourceConfig.difficultMin;
+            resource.set(resourceId, Resource({value: value, difficulty: diff}));
             remain = value;
         }
-        return (remain, cache, difficulty);
+        return (remain, cache, diff);
     }
 }

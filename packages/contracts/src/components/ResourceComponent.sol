@@ -7,7 +7,7 @@ uint256 constant ID = uint256(keccak256("component.Resource"));
 
 struct Resource {
     uint256 value;
-    uint256 difficuly;
+    uint256 difficulty;
 }
 
 contract ResourceComponent is BareComponent {
@@ -25,7 +25,7 @@ contract ResourceComponent is BareComponent {
         keys[0] = "value";
         values[0] = LibTypes.SchemaValue.UINT256;
 
-        keys[1] = "difficuly";
+        keys[1] = "difficulty";
         values[1] = LibTypes.SchemaValue.UINT256;
     }
 
@@ -33,16 +33,16 @@ contract ResourceComponent is BareComponent {
         uint256 entity,
         Resource memory resource
     ) public {
-        set(entity, abi.encode(resource.value, resource.difficuly));
+        set(entity, abi.encode(resource.value, resource.difficulty));
     }
 
     function getValue(
         uint256 entity
     ) public view returns (Resource memory) {
-        (uint256 value, uint256 difficuly) = abi.decode(
+        (uint256 value, uint256 difficulty) = abi.decode(
             getRawValue(entity),
             (uint256, uint256)
         );
-        return Resource(value, difficuly);
+        return Resource(value, difficulty);
     }
 }
