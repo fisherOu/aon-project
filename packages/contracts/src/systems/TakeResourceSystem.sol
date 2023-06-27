@@ -125,7 +125,7 @@ contract TakeResourceSystem is System {
         cache = 0;
         diff = 0;
         if (resourceMining.has(resourceId)) {
-            diff = resource.getValue(resourceId).diff;
+            diff = resource.getValue(resourceId).difficulty;
             ResourceMining memory miningState = resourceMining.getValue(resourceId);
             remain = miningState.remain;
             cache = miningState.cache;
