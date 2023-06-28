@@ -91,10 +91,7 @@ library TreasureConfigInitializer {
         // uint32 treasureWidth = uint32(34);
         // bytes memory types = new bytes(treasureHeight * treasureWidth);
         // bytes memory types = abi.encode(treasureTypes);
-        TreasureTypes[] memory types;
-
-        // 获取a的长度并设置types的长度
-        types.length = treasureTypes.length;
+        TreasureTypes[] memory types = new TreasureTypes[](treasureTypes.length);
 
         // 将a中的元素复制到types
         for (uint i = 0; i < treasureTypes.length; i++) {
@@ -327,10 +324,10 @@ library TreasureConfigInitializer {
             })
         ];
 
-        PropertyConfigRange[] memory properties;
+        PropertyConfigRange[] memory properties = new PropertyConfigRange[](treasureProperties.length);
 
         // 获取a的长度并设置properties的长度
-        properties.length = treasureProperties.length;
+        // properties.length = treasureProperties.length;
 
         // 将a中的元素复制到properties
         for (uint j = 0; j < treasureProperties.length; j++) {
