@@ -22,7 +22,7 @@ library TreasureConfigInitializer {
         // TerrainType O = TerrainType.None;
         // TerrainType T = TerrainType.TallGrass;
         // TerrainType B = TerrainType.Boulder;
-        TreasureTypes[7] memory treasureTypes = [
+        TreasureTypes[] memory treasureTypes = [
             // [0, 1, 1, 2001, 1001, 3001],
             TreasureTypes({
                 typeId: 0,
@@ -90,7 +90,7 @@ library TreasureConfigInitializer {
         // uint32 treasureHeight = uint32(treasureTypes.length);
         // uint32 treasureWidth = uint32(34);
         // bytes memory types = new bytes(treasureHeight * treasureWidth);
-        bytes memory types = abi.encode(treasureTypes);
+        // bytes memory types = abi.encode(treasureTypes);
 
         // for (uint32 x = 0; x < treasureHeight; x++) {
         //     // bytes8(uint64(treasureTypes[x][0]));
@@ -134,7 +134,7 @@ library TreasureConfigInitializer {
         //     types[x * treasureWidth + 33] = bytes8(uint64(treasureTypes[x][5]))[7];
         // }
 
-        PropertyConfigRange[13] memory treasureProperties = [
+        PropertyConfigRange[] memory treasureProperties = [
             PropertyConfigRange({
                 propertyId: 1001,
                 triggerType: 1,
@@ -321,7 +321,7 @@ library TreasureConfigInitializer {
         // uint32 height = uint32(treasureProperties.length);
         // uint32 width = uint32(42);
         // bytes memory properties = new bytes(width * height);
-        bytes memory properties = abi.encode(treasureProperties);
+        // bytes memory properties = abi.encode(treasureProperties);
 
         // for (uint32 y = 0; y < height; y++) {
         //     // bytes8(uint64(treasureProperties[y][0]));
@@ -377,6 +377,6 @@ library TreasureConfigInitializer {
         //     types[y * treasureWidth + 41] = bytes4(uint32(treasureProperties[y][10]))[3];
         // }
 
-        treasureConfig.set(TreasureConfig({ energyMax: 200, energyMin: 50, treasureTypes: types, properties: properties }));
+        treasureConfig.set(TreasureConfig({ energyMax: 200, energyMin: 50, treasureTypes: treasureTypes, properties: treasureProperties }));
     }
 }

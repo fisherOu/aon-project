@@ -64,7 +64,7 @@ contract TreasureConfigComponent is BareComponent {
   }
 
   function getValue() public view returns (TreasureConfig memory) {
-    (uint32 energyMax, uint32 energyMin, TreasureTypes[] memory treasureTypes, PropertyConfigRange[] memory properties) = abi.decode(getRawValue(SingletonID), (uint32, uint32, bytes, bytes));
+    (uint32 energyMax, uint32 energyMin, TreasureTypes[] memory treasureTypes, PropertyConfigRange[] memory properties) = abi.decode(getRawValue(SingletonID), (uint32, uint32, TreasureTypes[], PropertyConfigRange[]));
     return TreasureConfig(energyMax, energyMin, treasureTypes, properties);
   }
 }
