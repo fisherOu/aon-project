@@ -39,7 +39,7 @@ contract MarkSystem is System {
         getAddressById(components, ZKConfigComponentID)
     ).getValue();
     if (zkConfig.open) {
-        uint256[5] memory input = [markInfo.realHash, markInfo.coordHash, markInfo.width, markInfo.height, markInfo.distance];
+        uint256[5] memory input = [markInfo.realHash, markInfo.coordHash, markInfo.distance, markInfo.width, markInfo.height];
         require(
             IMarkVerifier(zkConfig.markVerifyAddress).verifyProof(
                 markInfo.a,
