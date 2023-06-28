@@ -13,6 +13,7 @@ struct ZKConfig {
     address markVerifyAddress;
     address treasureVerifyAddress;
     address resourceVerifyAddress;
+    address attackPathVerifyAddress;
 }
 
 contract ZKConfigComponent is BareComponent {
@@ -24,8 +25,8 @@ contract ZKConfigComponent is BareComponent {
         override
         returns (string[] memory keys, LibTypes.SchemaValue[] memory values)
     {
-        keys = new string[](6);
-        values = new LibTypes.SchemaValue[](6);
+        keys = new string[](7);
+        values = new LibTypes.SchemaValue[](7);
 
         keys[0] = "open";
         values[0] = LibTypes.SchemaValue.BOOL;
@@ -44,6 +45,9 @@ contract ZKConfigComponent is BareComponent {
 
         keys[5] = "resourceVerifyAddress";
         values[5] = LibTypes.SchemaValue.ADDRESS;
+
+        keys[6] = "attackPathVerifyAddress";
+        values[6] = LibTypes.SchemaValue.ADDRESS;
     }
 
     function set(ZKConfig memory moveConfig) public {
@@ -55,7 +59,8 @@ contract ZKConfigComponent is BareComponent {
                 moveConfig.moveVerifyAddress,
                 moveConfig.markVerifyAddress,
                 moveConfig.treasureVerifyAddress,
-                moveConfig.resourceVerifyAddress
+                moveConfig.resourceVerifyAddress,
+                moveConfig.attackPathVerifyAddress
             )
         );
     }
@@ -66,10 +71,11 @@ contract ZKConfigComponent is BareComponent {
             address moveVerifyAddress,
             address markVerifyAddress,
             address treasureVerifyAddress,
-            address resourceVerifyAddress) = abi.decode(
+            address resourceVerifyAddress,
+            address attackPathVerifyAddress) = abi.decode(
                 getRawValue(SingletonID),
-                (bool, address, address, address, address, address)
+                (bool, address, address, address, address, address, address)
             );
-        return ZKConfig(open, initVerifyAddress, moveVerifyAddress, markVerifyAddress, treasureVerifyAddress, resourceVerifyAddress);
+        return ZKConfig(open, initVerifyAddress, moveVerifyAddress, markVerifyAddress, treasureVerifyAddress, resourceVerifyAddress, attackPathVerifyAddress);
     }
 }
