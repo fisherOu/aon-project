@@ -22,7 +22,7 @@ library TreasureConfigInitializer {
         // TerrainType O = TerrainType.None;
         // TerrainType T = TerrainType.TallGrass;
         // TerrainType B = TerrainType.Boulder;
-        TreasureTypes[] memory treasureTypes = [
+        TreasureTypes[7] memory treasureTypes = [
             // [0, 1, 1, 2001, 1001, 3001],
             TreasureTypes({
                 typeId: 0,
@@ -91,6 +91,15 @@ library TreasureConfigInitializer {
         // uint32 treasureWidth = uint32(34);
         // bytes memory types = new bytes(treasureHeight * treasureWidth);
         // bytes memory types = abi.encode(treasureTypes);
+        TreasureTypes[] memory types;
+
+        // 获取a的长度并设置types的长度
+        types.length = treasureTypes.length;
+
+        // 将a中的元素复制到types
+        for (uint i = 0; i < treasureTypes.length; i++) {
+            types[i] = treasureTypes[i];
+        }
 
         // for (uint32 x = 0; x < treasureHeight; x++) {
         //     // bytes8(uint64(treasureTypes[x][0]));
@@ -134,7 +143,7 @@ library TreasureConfigInitializer {
         //     types[x * treasureWidth + 33] = bytes8(uint64(treasureTypes[x][5]))[7];
         // }
 
-        PropertyConfigRange[] memory treasureProperties = [
+        PropertyConfigRange[13] memory treasureProperties = [
             PropertyConfigRange({
                 propertyId: 1001,
                 triggerType: 1,
@@ -318,6 +327,16 @@ library TreasureConfigInitializer {
             })
         ];
 
+        PropertyConfigRange[] memory properties;
+
+        // 获取a的长度并设置properties的长度
+        properties.length = treasureProperties.length;
+
+        // 将a中的元素复制到properties
+        for (uint j = 0; j < treasureProperties.length; j++) {
+            properties[j] = treasureProperties[j];
+        }
+
         // uint32 height = uint32(treasureProperties.length);
         // uint32 width = uint32(42);
         // bytes memory properties = new bytes(width * height);
@@ -377,6 +396,6 @@ library TreasureConfigInitializer {
         //     types[y * treasureWidth + 41] = bytes4(uint32(treasureProperties[y][10]))[3];
         // }
 
-        treasureConfig.set(TreasureConfig({ energyMax: 200, energyMin: 50, treasureTypes: treasureTypes, properties: treasureProperties }));
+        treasureConfig.set(TreasureConfig({ energyMax: 200, energyMin: 50, treasureTypes: types, properties: properties }));
     }
 }
