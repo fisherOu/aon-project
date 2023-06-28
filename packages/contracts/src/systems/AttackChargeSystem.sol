@@ -84,6 +84,6 @@ contract AttackChargeSystem is System {
         );
         require(!attackCharge.has(entityId), "already charging");
         attackCharge.set(entityId, AttackCharge({coord_hash: attackInfo.coordHash, direction: attackInfo.direction}));
-        attackTimer.set(entityId, AttackTimer({cooldownTimeout: uint64(block.timestamp + 10), attackTimeout: uint64(block.timestamp + 10)}));
+        attackTimer.set(entityId, AttackTimer({cooldownTimeout: uint64(block.timestamp + 10), chargingTimeout: uint64(block.timestamp + 10)}));
     }
 }
