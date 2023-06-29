@@ -23,10 +23,10 @@ template Main() {
     signal input seed2;
     signal input width;
     signal input height;
-    signal input distMax;
 
     signal output pub1;
     signal output pub2;
+    signal output distMax;
 
     /* check abs(x1), abs(y1), abs(x2), abs(y2) < 2 ** 32 */
     component rp = MultiRangeProof(4, 40, 2 ** 32);
@@ -53,14 +53,11 @@ template Main() {
     signal diffY;
     diffY <== y1 - y2;
 
-    component ltDist = LessThan(32);
     signal firstDistSquare;
     signal secondDistSquare;
     firstDistSquare <== diffX * diffX;
     secondDistSquare <== diffY * diffY;
-    ltDist.in[0] <== firstDistSquare + secondDistSquare;
-    ltDist.in[1] <== distMax * distMax + 1;
-    ltDist.out === 1;
+    distMax <== firstDistSquare + secondDistSquare;
 
     /* check MiMCSponge(x1,y1) = pub1, MiMCSponge(x2,y2) = pub2 */
     /*
@@ -81,4 +78,4 @@ template Main() {
     pub2 <== mimc2.outs[0];
 }
 
-component main { public [seed1, seed2, width, height, distMax] } = Main();
+component main { public [seed1, seed2, width, height] } = Main();

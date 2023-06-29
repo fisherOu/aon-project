@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["ResourcePositionComponent"]
+// components: ["ResourcePositionComponent", "TreasureComponent", "PlayerBelongingComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
@@ -103,6 +103,7 @@ contract PickUpTreasureSystem is System {
         require(pickUpInfo.energy >= treasureConfig.energyMin && pickUpInfo.energy <= treasureConfig.energyMax, "energy over limit");
 
         // generate treasure properties
+        resourcePosition.set(treasureId, pickUpInfo.coordHash);
 
         TreasureComponent(getAddressById(components, TreasureComponentID)).set(
             entityId,

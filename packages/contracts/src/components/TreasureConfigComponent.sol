@@ -7,12 +7,12 @@ import { SingletonID } from "solecs/SingletonID.sol";
 uint256 constant ID = uint256(keccak256("component.TreasureConfig"));
 
 struct PropertyConfigRange {
-    uint64 propertyId;
-    uint8 triggerType;// 0: airdrop; 1: flightToTarget; 2: flightAndTouch; 3: destroy
+    uint32 propertyId;
+    uint32 triggerType;// 0: airdrop; 1: flightToTarget; 2: flightAndTouch; 3: destroy
     //0: vision; 1: damage; 2: shield; 3: teleprotation;
     // 4: two-way teleprotation; 5: DefenseCannon; 6: Wormhole; 7: LandMine;
     // 8: flightToTarget; 9: fog;
-    uint8 effectType;
+    uint32 effectType;
     uint32 energyPerRange;
     uint32 rangeMax;
     uint32 rangeMin;
@@ -24,19 +24,19 @@ struct PropertyConfigRange {
 }
 
 struct TreasureTypes {
-    uint64 typeId;
-    uint8 isActive;// 0: not active; 1: active;
-    uint8 isFlight;// 0: airdrop; 1: flight;
-    uint64 flightEffectId;
-    uint64 arrivalEffectId;
-    uint64 destroyEffectId;
+    uint32 typeId;
+    uint32 isActive;// 0: not active; 1: active;
+    uint32 isFlight;// 0: airdrop; 1: flight;
+    uint32 flightEffectId;
+    uint32 arrivalEffectId;
+    uint32 destroyEffectId;
 }
 
 struct TreasureConfig {
   uint32 energyMax;
   uint32 energyMin;
-  bytes treasureTypes;
-  bytes properties;
+  TreasureTypes[] treasureTypes;
+  PropertyConfigRange[] properties;
 }
 
 contract TreasureConfigComponent is BareComponent {
@@ -53,10 +53,10 @@ contract TreasureConfigComponent is BareComponent {
     values[1] = LibTypes.SchemaValue.UINT32;
 
     keys[2] = "treasureTypes";
-    values[2] = LibTypes.SchemaValue.STRING;
+    values[2] = LibTypes.SchemaValue.UINT32_ARRAY;
 
     keys[3] = "properties";
-    values[3] = LibTypes.SchemaValue.STRING;
+    values[3] = LibTypes.SchemaValue.UINT32_ARRAY;
   }
 
   function set(TreasureConfig memory treasureConfig) public {
@@ -64,7 +64,7 @@ contract TreasureConfigComponent is BareComponent {
   }
 
   function getValue() public view returns (TreasureConfig memory) {
-    (uint32 energyMax, uint32 energyMin, bytes memory treasureTypes, bytes memory properties) = abi.decode(getRawValue(SingletonID), (uint32, uint32, bytes, bytes));
+    (uint32 energyMax, uint32 energyMin, TreasureTypes[] memory treasureTypes, PropertyConfigRange[] memory properties) = abi.decode(getRawValue(SingletonID), (uint32, uint32, TreasureTypes[], PropertyConfigRange[]));
     return TreasureConfig(energyMax, energyMin, treasureTypes, properties);
   }
 }
