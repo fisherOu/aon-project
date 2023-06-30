@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["AttackChargeComponent", "AttackTimerComponent"]
+// components: ["AttackChargeComponent", "AttackTimerComponent", "HiddenPositionComponent", "HPComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";

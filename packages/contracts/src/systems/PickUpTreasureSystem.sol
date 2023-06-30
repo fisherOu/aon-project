@@ -178,7 +178,7 @@ contract PickUpTreasureSystem is System {
             lastEnergy = lastEnergy - treasureEffect.buff.energy;
         }
         TreasureEffectComponent(getAddressById(components, TreasureEffectComponentID)).set(
-            entityId,
+            addressToEntity(msg.sender),
             treasureEffect
         );
     }
