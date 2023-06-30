@@ -79,12 +79,12 @@ contract AttackFinishSystem is System {
         HPComponent hp = HPComponent(
             getAddressById(components, HPComponentID)
         );
-        require(attackCharge.has(entityId) && attackCharge.getValue(entityId).coord_hash == attactInfo.input[0], "attack not from begining");
+        require(attackCharge.has(entityId) && attackCharge.getValue(entityId).coord_hash == attackInfo.input[0], "attack not from begining");
         for (uint i=0; i<10; i++) {
             if (attackInfo.input[30+i] <= mapConfig.gameRadiusX &&
                     attackInfo.input[40+i] <= mapConfig.gameRadiusY) {
                 if (i > 0) {
-                    uint256[] entities = position.getEntitiesWithValue(input[i]);
+                    uint256[] memory entities = position.getEntitiesWithValue(attackInfo.input[i]);
                     if (entities.length == 0) {
                         continue;
                     }
