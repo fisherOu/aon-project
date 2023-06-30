@@ -67,12 +67,16 @@ contract Movev2System is System {
       "no move points"
     );
     require(moveInfo.distance <= moveConfig.maxDistance, "move too far");
+    HiddenPositionComponent position = HiddenPositionComponent(
+        getAddressById(components, HiddenPositionComponentID)
+    );
+    require(position.getEntitiesWithValue(moveInfo.coordHash).length > 0, "have entity on tile");
 
     // Constrain position to map size, wrapping around if necessary
     MapConfig memory mapConfig = MapConfigv2Component(getAddressById(components, MapConfigv2ComponentID)).getValue();
     require(moveInfo.width <= mapConfig.gameRadiusX && moveInfo.height <= mapConfig.gameRadiusY, "radius over limit");
 
-    HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).set(entityId, moveInfo.coordHash);
+    position.set(entityId, moveInfo.coordHash);
     if (moveInfo.distance > 10) {
       uint64 remainPoints = movable.remainingMovePoints +
         (uint64(block.timestamp) - movable.lastMoveTime) /

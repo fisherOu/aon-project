@@ -30,7 +30,8 @@ library TreasureConfigInitializer {
                 isFlight: 1,
                 flightEffectId: 2001,
                 arrivalEffectId: 1001,
-                destroyEffectId: 3001
+                destroyEffectId: 3001,
+                buffEffectId: 0
             }),
             // [1, 1, 1, 2002, 1002, 3002],
             TreasureTypes({
@@ -39,7 +40,8 @@ library TreasureConfigInitializer {
                 isFlight: 1,
                 flightEffectId: 2002,
                 arrivalEffectId: 1002,
-                destroyEffectId: 3002
+                destroyEffectId: 3002,
+                buffEffectId: 0
             }),
             // [2, 1, 1, 2003, 1003, 0],
             TreasureTypes({
@@ -48,7 +50,8 @@ library TreasureConfigInitializer {
                 isFlight: 1,
                 flightEffectId: 2003,
                 arrivalEffectId: 1003,
-                destroyEffectId: 0
+                destroyEffectId: 0,
+                buffEffectId: 0
             }),
             // [3, 1, 0, 0, 1501, 0],
             TreasureTypes({
@@ -57,7 +60,8 @@ library TreasureConfigInitializer {
                 isFlight: 0,
                 flightEffectId: 0,
                 arrivalEffectId: 1501,
-                destroyEffectId: 0
+                destroyEffectId: 0,
+                buffEffectId: 0
             }),
             // [4, 1, 0, 0, 1502, 0],
             TreasureTypes({
@@ -66,7 +70,8 @@ library TreasureConfigInitializer {
                 isFlight: 0,
                 flightEffectId: 0,
                 arrivalEffectId: 1502,
-                destroyEffectId: 0
+                destroyEffectId: 0,
+                buffEffectId: 0
             }),
             // [5, 1, 0, 0, 1503, 3003],
             TreasureTypes({
@@ -75,7 +80,8 @@ library TreasureConfigInitializer {
                 isFlight: 0,
                 flightEffectId: 0,
                 arrivalEffectId: 1503,
-                destroyEffectId: 3003
+                destroyEffectId: 3003,
+                buffEffectId: 0
             }),
             // [6, 1, 0, 0, 1504, 0]
             TreasureTypes({
@@ -84,7 +90,8 @@ library TreasureConfigInitializer {
                 isFlight: 0,
                 flightEffectId: 0,
                 arrivalEffectId: 1504,
-                destroyEffectId: 0
+                destroyEffectId: 0,
+                buffEffectId: 0
             })
         ];
         // uint32 treasureHeight = uint32(treasureTypes.length);

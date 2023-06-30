@@ -6,6 +6,7 @@ import {MoveConfigComponent, ID as MoveConfigComponentID, MoveConfig} from "comp
 import {VisionConfigComponent, ID as VisionConfigComponentID, VisionConfig} from "components/VisionConfigComponent.sol";
 import {TerrainComponent, ID as TerrainComponentID} from "components/TerrainComponent.sol";
 import {ResourceDistributionComponent, ID as ResourceDistributionComponentID} from "components/ResourceDistributionComponent.sol";
+import {TreasureDistributionComponent, ID as TreasureDistributionComponentID} from "components/TreasureDistributionComponent.sol";
 import {SingletonID} from "solecs/SingletonID.sol";
 
 library MapConfigv2Initializer {
@@ -23,10 +24,14 @@ library MapConfigv2Initializer {
             world.getComponent(TerrainComponentID)
         );
         ResourceDistributionComponent resourceDistribution = ResourceDistributionComponent(
-                world.getComponent(ResourceDistributionComponentID)
-            );
+            world.getComponent(ResourceDistributionComponentID)
+        );
+        TreasureDistributionComponent treasureDistribution = TreasureDistributionComponent(
+            world.getComponent(TreasureDistributionComponentID)
+        );
         terrain.set(SingletonID, 11111);
         resourceDistribution.set(SingletonID, 22222);
+        treasureDistribution.set(SingletonID, 33333);
         // ObstructionComponent obstruction = ObstructionComponent(world.getComponent(ObstructionComponentID));
         // EncounterTriggerComponent encounterTrigger = EncounterTriggerComponent(
         //   world.getComponent(EncounterTriggerComponentID)
