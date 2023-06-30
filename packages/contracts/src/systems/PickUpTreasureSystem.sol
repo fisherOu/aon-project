@@ -119,7 +119,7 @@ contract PickUpTreasureSystem is System {
         TreasureConfig memory treasureConfig = TreasureConfigComponent(
             getAddressById(components, TreasureConfigComponentID)
         ).getValue();
-        TreasureTypes memory treasureTypes = TreasureTypes(0, 0, 0, 0, 0, 0);
+        TreasureTypes memory treasureTypes = TreasureTypes(0, 0, 0, 0, 0, 0, 0);
         for (uint i = 0; i < treasureConfig.treasureTypes.length; i++) {
             if (treasureConfig.treasureTypes[i].typeId == pickUpInfo.typeId) {
                 treasureTypes = treasureConfig.treasureTypes[i];
