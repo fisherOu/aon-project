@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["ResourcePositionComponent", "TreasureComponent", "PlayerBelongingComponent"]
+// components: ["ResourcePositionComponent", "TreasureComponent", "PlayerBelongingComponent", "TreasureEffectComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
@@ -12,6 +12,7 @@ import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components
 import {ResourcePositionComponent, ID as ResourcePositionComponentID} from "components/ResourcePositionComponent.sol";
 import {PlayerBelongingComponent, ID as PlayerBelongingComponentID} from "components/PlayerBelongingComponent.sol";
 import {TreasureComponent, ID as TreasureComponentID, Treasure} from "components/TreasureComponent.sol";
+import {TreasureEffectComponent, ID as TreasureEffectComponentID, TreasureEffect, Effect} from "components/TreasureEffectComponent.sol";
 // import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerComponent.sol";
 // import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
 // import {WarshipComponent, ID as WarshipComponentID, Warship} from "components/WarshipComponent.sol";
@@ -112,5 +113,105 @@ contract PickUpTreasureSystem is System {
         // MoveCooldownComponent(
         //     getAddressById(components, MoveCooldownComponentID)
         // ).set(entityId, MoveCooldown(uint64(block.timestamp), treasureConfig.initPoints));
+    }
+
+    function generateProperties(PickUpInfo memory pickUpInfo) internal {
+        TreasureConfig memory treasureConfig = TreasureConfigComponent(
+            getAddressById(components, TreasureConfigComponentID)
+        ).getValue();
+        TreasureTypes memory treasureTypes = TreasureTypes(0, 0, 0, 0, 0, 0, 0);
+        for (uint i = 0; i < treasureConfig.treasureTypes.length; i++) {
+            if (treasureConfig.treasureTypes[i].typeId == pickUpInfo.typeId) {
+                treasureTypes = treasureConfig.treasureTypes[i];
+                break;
+            }
+        }
+        require(treasureTypes.typeId > 0, "type Id invalid");
+        PropertyConfigRange memory flightConfig = PropertyConfigRange(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        PropertyConfigRange memory arrivalConfig = PropertyConfigRange(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        PropertyConfigRange memory destroyConfig = PropertyConfigRange(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        PropertyConfigRange memory buffConfig = PropertyConfigRange(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        for (uint i = 0; i < treasureConfig.properties.length; i++) {
+            if (treasureConfig.properties[i].propertyId == treasureTypes.flightEffectId) {
+                flightConfig = treasureConfig.properties[i];
+            }
+            if (treasureConfig.properties[i].propertyId == treasureTypes.arrivalEffectId) {
+                arrivalConfig = treasureConfig.properties[i];
+            }
+            if (treasureConfig.properties[i].propertyId == treasureTypes.destroyEffectId) {
+                destroyConfig = treasureConfig.properties[i];
+            }
+            if (treasureConfig.properties[i].propertyId == treasureTypes.buffEffectId) {
+                buffConfig = treasureConfig.properties[i];
+            }
+            if (flightConfig.propertyId != 0 && arrivalConfig.propertyId != 0 && destroyConfig.propertyId != 0 && buffConfig.propertyId != 0) {
+                break;
+            }
+        }
+        require(flightConfig.propertyId != 0 || arrivalConfig.propertyId != 0 || destroyConfig.propertyId != 0 || buffConfig.propertyId != 0, "treasure type invalid");
+        uint256 rand = uint(keccak256(abi.encodePacked(block.number, msg.sender, pickUpInfo.coordHash, pickUpInfo.treasureSeed, pickUpInfo.treasureType, pickUpInfo.energy, block.difficulty)));
+        TreasureEffect memory treasureEffect = TreasureEffect({isActive: treasureTypes.isActive,
+         isFlight: treasureTypes.isFlight,
+         flight: Effect({valid: 0, triggerType: 0, effectType: 0, energy: 0, range: 0, area: 0, damage: 0, shield: 0}),
+         arrival: Effect({valid: 0, triggerType: 0, effectType: 0, energy: 0, range: 0, area: 0, damage: 0, shield: 0}),
+         destroy: Effect({valid: 0, triggerType: 0, effectType: 0, energy: 0, range: 0, area: 0, damage: 0, shield: 0}),
+         buff: Effect({valid: 0, triggerType: 0, effectType: 0, energy: 0, range: 0, area: 0, damage: 0, shield: 0})});
+        uint256 lastEnergy = pickUpInfo.energy;
+        if (flightConfig.propertyId > 0) {
+            (treasureEffect.flight, rand) = propertyConfigToEffect(flightConfig, rand, lastEnergy);
+            require(lastEnergy >= treasureEffect.flight.energy, "lack of energy");
+            lastEnergy = lastEnergy - treasureEffect.flight.energy;
+        }
+        if (arrivalConfig.propertyId > 0) {
+            (treasureEffect.arrival, rand) = propertyConfigToEffect(arrivalConfig, rand, lastEnergy);
+            require(lastEnergy >= treasureEffect.arrival.energy, "lack of energy");
+            lastEnergy = lastEnergy - treasureEffect.arrival.energy;
+        }
+        if (destroyConfig.propertyId > 0) {
+            (treasureEffect.destroy, rand) = propertyConfigToEffect(destroyConfig, rand, lastEnergy);
+            require(lastEnergy >= treasureEffect.destroy.energy, "lack of energy");
+            lastEnergy = lastEnergy - treasureEffect.destroy.energy;
+        }
+        if (buffConfig.propertyId > 0) {
+            (treasureEffect.buff, rand) = propertyConfigToEffect(buffConfig, rand, lastEnergy);
+            require(lastEnergy >= treasureEffect.buff.energy, "lack of energy");
+            lastEnergy = lastEnergy - treasureEffect.buff.energy;
+        }
+        TreasureEffectComponent(getAddressById(components, TreasureEffectComponentID)).set(
+            addressToEntity(msg.sender),
+            treasureEffect
+        );
+    }
+
+    function propertyConfigToEffect(PropertyConfigRange memory propertyConfigRange, uint256 rand, uint256 lastEnergy) internal returns (Effect memory effect, uint256 newRand) {
+        newRand = rand;
+        if (propertyConfigRange.propertyId > 0) {
+            effect.valid = 1;
+            effect.triggerType = propertyConfigRange.triggerType;
+            effect.effectType = propertyConfigRange.effectType;
+            // effect.energy = propertyConfigRange.effectType;
+            (newRand, effect.range) = getRandom(newRand, propertyConfigRange.rangeMin, propertyConfigRange.rangeMax);
+            (newRand, effect.area) = getRandom(newRand, propertyConfigRange.areaMin, propertyConfigRange.areaMax);
+            // effect.area = propertyConfigRange.effectType;
+            if (propertyConfigRange.energyPerDamage > 0) {
+                effect.damage = 1;
+            }
+            if (propertyConfigRange.energyPerShield > 0) {
+                effect.shield = 1;
+            }
+            effect.energy = propertyConfigRange.energyPerArea * effect.area + propertyConfigRange.energyPerDamage * effect.damage + propertyConfigRange.energyPerRange * effect.range + propertyConfigRange.energyPerShield * effect.shield;
+        }
+        return (effect, newRand);
+    }
+
+    function getRandom(uint256 rand, uint32 min, uint32 max) internal returns (uint256 newRand, uint32 value) {
+        if (max - min > 0) {
+            value = uint32(rand % uint256(max - min) + uint256(min));
+            newRand = rand / uint256(max - min);
+        } else {
+            value = 0;
+            newRand = rand;
+        }
+        return (newRand, value);
     }
 }

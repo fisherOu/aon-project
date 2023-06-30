@@ -30,6 +30,7 @@ struct TreasureTypes {
     uint32 flightEffectId;
     uint32 arrivalEffectId;
     uint32 destroyEffectId;
+    uint32 buffEffectId;
 }
 
 struct TreasureConfig {

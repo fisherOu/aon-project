@@ -11,9 +11,13 @@ library VerifyInitializer {
         );
         // don't set if not checking zk
         zkConfig.set(
-            ZKConfig({open: true, initVerifyAddress: 0x44E4cE6FBbB74b97ED410918FE078FF96FCC3e59, moveVerifyAddress: 0x25DB2FDb5DD5a1fA0cdD05D1861D415d7015f78c, markVerifyAddress: 0xFDe64A83aFAeF76B1ff7f8b3D17791D0e270BDb8, treasureVerifyAddress: 0x32Ac23C5DAa44437726A529B695aCa575986eD7a, resourceVerifyAddress: 0x9a961BE9bED3C9a225c3035954D42C9B3957d7d7,
+            ZKConfig({open: true, initVerifyAddress: 0xd2E3710e75b0BBeF7274EA8C9c912bC8988171F6,
+            moveVerifyAddress: 0xDc4c4c2DAC39F2651a54FbCd8d6f7a915e9a3FE0,
+            markVerifyAddress: 0xb4C03B82B2e46b801df2203DE6a3550d35AD69bf,
+            treasureVerifyAddress: 0xEB49bD3A80A5b7C221843664a30060bcfD963f47,
+            resourceVerifyAddress: 0xC444a840dBA9e5db9Fc35863d2f79FeA2890dF9d,
             attackPathVerifyAddress:
-            0x9f0e5b2bb6329C112Ac9aFe838dD4262a7490Cc9})
+            0x5c618759661C342ba99fA59CC05a0Aa7134b7E87})
         );
     }
 }

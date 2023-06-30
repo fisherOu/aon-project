@@ -6,8 +6,8 @@ pragma circom 2.0.0;
     - MiMCSponge(x,y,seed) = pub
 */
 
-include "../../client/node_modules/circomlib/circuits/mimcsponge.circom";
-include "../../client/node_modules/circomlib/circuits/comparators.circom";
+include "../../../node_modules/circomlib/circuits/mimcsponge.circom";
+include "../../../node_modules/circomlib/circuits/comparators.circom";
 include "../range_proof/circuit.circom";
 // include "../perlin/compiled.circom";
 
