@@ -17,7 +17,7 @@ import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "componen
 import {HPComponent, ID as HPComponentID} from "components/HPComponent.sol";
 // import {WarshipComponent, ID as WarshipComponentID, Warship} from "components/WarshipComponent.sol";
 // import {MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown} from "components/MoveCooldownComponent.sol";
-import {IInitVerifier} from "libraries/InitVerifier.sol";
+import {IAttackPathVerifier} from "libraries/AttackPathVerifier.sol";
 
 uint256 constant ID = uint256(keccak256("system.AttackFinish"));
 
@@ -47,7 +47,7 @@ contract AttackFinishSystem is System {
         ).getValue();
         if (zkConfig.open) {
             require(
-                IInitVerifier(zkConfig.initVerifyAddress).verifyProof(
+                IAttackPathVerifier(zkConfig.attackPathVerifyAddress).verifyProof(
                     attackInfo.a,
                     attackInfo.b,
                     attackInfo.c,

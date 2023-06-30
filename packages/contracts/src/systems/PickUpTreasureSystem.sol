@@ -158,22 +158,22 @@ contract PickUpTreasureSystem is System {
          buff: Effect({valid: 0, triggerType: 0, effectType: 0, energy: 0, range: 0, area: 0, damage: 0, shield: 0})});
         uint256 lastEnergy = pickUpInfo.energy;
         if (flightConfig.propertyId > 0) {
-            (rand, treasureEffect.flight) = propertyConfigToEffect(flightConfig, rand, lastEnergy);
+            (treasureEffect.flight, rand) = propertyConfigToEffect(flightConfig, rand, lastEnergy);
             require(lastEnergy >= treasureEffect.flight.energy, "lack of energy");
             lastEnergy = lastEnergy - treasureEffect.flight.energy;
         }
         if (arrivalConfig.propertyId > 0) {
-            (rand, treasureEffect.arrival) = propertyConfigToEffect(arrivalConfig, rand, lastEnergy);
+            (treasureEffect.arrival, rand) = propertyConfigToEffect(arrivalConfig, rand, lastEnergy);
             require(lastEnergy >= treasureEffect.arrival.energy, "lack of energy");
             lastEnergy = lastEnergy - treasureEffect.arrival.energy;
         }
         if (destroyConfig.propertyId > 0) {
-            (rand, treasureEffect.destroy) = propertyConfigToEffect(destroyConfig, rand, lastEnergy);
+            (treasureEffect.destroy, rand) = propertyConfigToEffect(destroyConfig, rand, lastEnergy);
             require(lastEnergy >= treasureEffect.destroy.energy, "lack of energy");
             lastEnergy = lastEnergy - treasureEffect.destroy.energy;
         }
         if (buffConfig.propertyId > 0) {
-            (rand, treasureEffect.buff) = propertyConfigToEffect(buffConfig, rand, lastEnergy);
+            (treasureEffect.buff, rand) = propertyConfigToEffect(buffConfig, rand, lastEnergy);
             require(lastEnergy >= treasureEffect.buff.energy, "lack of energy");
             lastEnergy = lastEnergy - treasureEffect.buff.energy;
         }
