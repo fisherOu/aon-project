@@ -105,7 +105,15 @@ contract DigResourceSystem is System {
         uint256 powResult = uint256(keccak256(abi.encodePacked(digInfo.coordHash, digInfo.remain, digInfo.powNonce))); 
         require(powResult / 16 	** (64 - difficulty) == 0, "pow value invalid");
         resourcePosition.set(resourceId, digInfo.coordHash);
-        resourceMining.set(resourceId, ResourceMining({remain: remain-1, cache: cache+1}));
+        resourceMining.set(resourceId, ResourceMining({remain: remain-1, cache: cache}));
+        GoldAmountComponent goldAmount = GoldAmountComponent(
+            getAddressById(components, GoldAmountComponentID)
+        );
+        uint256 cache1 = 0;
+        if (goldAmount.has(entityId)) {
+            cache1 = cache1 + goldAmount.getValue(entityId);
+        }
+        goldAmount.set(entityId, cache1);
     }
 
     function getRemainAndCache(uint256 resourceId, uint256 perlin) internal returns (uint256 remain, uint256 cache, uint256 diff) {
