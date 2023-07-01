@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["ResourceMiningComponent", "ResourceComponent", "ResourcePositionComponent"]
+// components: ["GoldAmountComponent", "ResourceMiningComponent", "ResourceComponent", "ResourcePositionComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
@@ -14,6 +14,7 @@ import {ResourceMiningComponent, ID as ResourceMiningComponentID, ResourceMining
 import {ResourceComponent, ID as ResourceComponentID, Resource} from "components/ResourceComponent.sol";
 // import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerComponent.sol";
 import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
+import {GoldAmountComponent, ID as GoldAmountComponentID} from "components/GoldAmountComponent.sol";
 // import {WarshipComponent, ID as WarshipComponentID, Warship} from "components/WarshipComponent.sol";
 // import {MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown} from "components/MoveCooldownComponent.sol";
 import {IResourceVerifier} from "libraries/ResourceVerifier.sol";
