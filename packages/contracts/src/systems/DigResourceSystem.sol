@@ -108,7 +108,7 @@ contract DigResourceSystem is System {
         GoldAmountComponent goldAmount = GoldAmountComponent(
             getAddressById(components, GoldAmountComponentID)
         );
-        uint256 cache1 = 0;
+        uint256 cache1 = 1;
         if (goldAmount.has(entityId)) {
             cache1 = cache1 + goldAmount.getValue(entityId);
         }
