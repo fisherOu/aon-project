@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["PlayerComponent", "HiddenPositionComponent", "WarshipComponent", "MoveCooldownComponent", "HPComponent"]
+// components: ["GoldAmountComponent", "PlayerComponent", "HiddenPositionComponent", "WarshipComponent", "MoveCooldownComponent", "HPComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
@@ -12,6 +12,7 @@ import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components
 import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerComponent.sol";
 import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
 import {HPComponent, ID as HPComponentID} from "components/HPComponent.sol";
+import {GoldAmountComponent, ID as GoldAmountComponentID} from "components/GoldAmountComponent.sol";
 import {WarshipComponent, ID as WarshipComponentID, Warship} from "components/WarshipComponent.sol";
 import {MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown} from "components/MoveCooldownComponent.sol";
 import {IInitVerifier} from "libraries/InitVerifier.sol";
@@ -91,6 +92,10 @@ contract JoinGamev2System is System {
         HPComponent(getAddressById(components, HPComponentID)).set(
             entityId,
             1
+        );
+        GoldAmountComponent(getAddressById(components, GoldAmountComponentID)).set(
+            entityId,
+            0
         );
         MoveCooldownComponent(
             getAddressById(components, MoveCooldownComponentID)
