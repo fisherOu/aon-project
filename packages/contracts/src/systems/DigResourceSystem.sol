@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["ResourceMiningComponent", "ResourceComponent", "ResourcePositionComponent"]
+// components: ["GoldAmountComponent", "ResourceMiningComponent", "ResourceComponent", "ResourcePositionComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
@@ -14,6 +14,7 @@ import {ResourceMiningComponent, ID as ResourceMiningComponentID, ResourceMining
 import {ResourceComponent, ID as ResourceComponentID, Resource} from "components/ResourceComponent.sol";
 // import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerComponent.sol";
 import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
+import {GoldAmountComponent, ID as GoldAmountComponentID} from "components/GoldAmountComponent.sol";
 // import {WarshipComponent, ID as WarshipComponentID, Warship} from "components/WarshipComponent.sol";
 // import {MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown} from "components/MoveCooldownComponent.sol";
 import {IResourceVerifier} from "libraries/ResourceVerifier.sol";
@@ -26,13 +27,14 @@ struct DigInfo {
     uint256 height;
     uint256 seed;
     uint256 resourceSeed;
-    uint256 perlin;
+    uint256 terrainPerlin;
+    uint256 resourcePerlin;
     uint256[2] a;
     uint256[2][2] b;
     uint256[2] c;
     uint256 remain;
     uint256 cache;
-    uint256 powResult;
+    uint256 powNonce;
 }
 
 contract DigResourceSystem is System {
@@ -53,7 +55,7 @@ contract DigResourceSystem is System {
             getAddressById(components, ZKConfigComponentID)
         ).getValue();
         if (zkConfig.open) {
-            uint256[6] memory input = [digInfo.coordHash, digInfo.seed, digInfo.resourceSeed, digInfo.perlin, digInfo.width, digInfo.height];
+            uint256[7] memory input = [digInfo.coordHash, digInfo.seed, digInfo.resourceSeed, digInfo.terrainPerlin, digInfo.resourcePerlin, digInfo.width, digInfo.height];
             require(
                 IResourceVerifier(zkConfig.resourceVerifyAddress).verifyProof(
                     digInfo.a,
@@ -77,10 +79,7 @@ contract DigResourceSystem is System {
             "radius over limit"
         );
         require(
-            // hash <= resourceDifficulty <= resourceDifficulty || resourceDifficulty < hash <= resourceDifficulty
-            (digInfo.coordHash <= mapConfig.resourceDifficulty &&
-                mapConfig.resourceDifficulty <= mapConfig.resourceDifficulty) || (digInfo.coordHash <= mapConfig.resourceDifficulty &&
-                digInfo.coordHash > mapConfig.resourceDifficulty),
+            (digInfo.terrainPerlin >= 7500 && digInfo.coordHash / 16 ** (64 - mapConfig.resourceDifficulty) == 0 && digInfo.coordHash / 16 ** (64 - mapConfig.treasureDifficulty) > 0),
             "no resource to dig"
         );
         ResourcePositionComponent resourcePosition = ResourcePositionComponent(
@@ -100,11 +99,20 @@ contract DigResourceSystem is System {
         ResourceMiningComponent resourceMining = ResourceMiningComponent(
             getAddressById(components, ResourceMiningComponentID)
         );
-        (uint256 remain, uint256 cache, uint256 difficulty) = getRemainAndCache(resourceId, digInfo.perlin);
+        (uint256 remain, uint256 cache, uint256 difficulty) = getRemainAndCache(resourceId, digInfo.resourcePerlin);
         require(remain == digInfo.remain && cache == digInfo.cache, "remain value invalid");
-        require(digInfo.powResult / 16 	** (64 - difficulty) == 0, "pow value invalid");
+        uint256 powResult = uint256(keccak256(abi.encodePacked(digInfo.coordHash, digInfo.remain, digInfo.powNonce))); 
+        require(powResult / 16 	** (64 - difficulty) == 0, "pow value invalid");
         resourcePosition.set(resourceId, digInfo.coordHash);
-        resourceMining.set(resourceId, ResourceMining({remain: remain-1, cache: cache+1}));
+        resourceMining.set(resourceId, ResourceMining({remain: remain-1, cache: cache}));
+        GoldAmountComponent goldAmount = GoldAmountComponent(
+            getAddressById(components, GoldAmountComponentID)
+        );
+        uint256 cache1 = 0;
+        if (goldAmount.has(entityId)) {
+            cache1 = cache1 + goldAmount.getValue(entityId);
+        }
+        goldAmount.set(entityId, cache1);
     }
 
     function getRemainAndCache(uint256 resourceId, uint256 perlin) internal returns (uint256 remain, uint256 cache, uint256 diff) {

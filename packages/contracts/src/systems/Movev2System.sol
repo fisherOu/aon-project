@@ -70,7 +70,7 @@ contract Movev2System is System {
     HiddenPositionComponent position = HiddenPositionComponent(
         getAddressById(components, HiddenPositionComponentID)
     );
-    require(position.getEntitiesWithValue(moveInfo.coordHash).length > 0, "have entity on tile");
+    require(position.getEntitiesWithValue(moveInfo.coordHash).length == 0, "have entity on tile");
 
     // Constrain position to map size, wrapping around if necessary
     MapConfig memory mapConfig = MapConfigv2Component(getAddressById(components, MapConfigv2ComponentID)).getValue();

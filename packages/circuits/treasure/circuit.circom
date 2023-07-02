@@ -17,6 +17,7 @@ template Main() {
     signal input y;
     signal input seed;
     signal input treasureSeed;
+    signal input tp;
     signal input p;
     signal input width;
     signal input height;
@@ -53,12 +54,20 @@ template Main() {
 
     /* check perlin(x, y, treasureSeed) = p */
     /*
-    component perlin = MultiScalePerlin(3);
+    component perlin = MultiScalePerlin(2);
     perlin.p[0] <== x;
     perlin.p[1] <== y;
     perlin.p[2] <== treasureSeed;
-    p === perlin.out;
+    p === (perlin.out + 1) * 5000;
+
+    /* check perlin(x, y, Seed) = tp */
+    /*
+    component perlin1 = MultiScalePerlin(2);
+    perlin1.p[0] <== x;
+    perlin1.p[1] <== y;
+    perlin1.p[2] <== seed;
+    tp === (perlin1.out + 1) * 5000;
     */
 }
 
-component main { public [seed, treasureSeed, p, width, height] } = Main();
+component main { public [seed, treasureSeed, tp, p, width, height] } = Main();
