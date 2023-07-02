@@ -60,7 +60,7 @@ contract AttackChargeSystem is System {
         //         "Failed attack proof check"
         //     );
         // }
-        // uint256 entityId = addressToEntity(msg.sender);
+        uint256 entityId = addressToEntity(msg.sender);
         // require(attackInfo.coordHash == HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).getValue(entityId), "not standing on required tile");
         uint256 coordHash = HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).getValue(entityId);
 
