@@ -21,13 +21,13 @@ import {IInitVerifier} from "libraries/InitVerifier.sol";
 uint256 constant ID = uint256(keccak256("system.AttackCharge"));
 
 struct AttackChargeInfo {
-    uint256 coordHash;
-    uint256 width;
-    uint256 height;
-    uint256 seed;
-    uint256[2] a;
-    uint256[2][2] b;
-    uint256[2] c;
+    // uint256 coordHash;
+    // uint256 width;
+    // uint256 height;
+    // uint256 seed;
+    // uint256[2] a;
+    // uint256[2][2] b;
+    // uint256[2] c;
     uint256 direction;
 }
 
@@ -45,33 +45,34 @@ contract AttackChargeSystem is System {
     function executeTyped(
         AttackChargeInfo memory attackInfo
     ) public returns (bytes memory) {
-        ZKConfig memory zkConfig = ZKConfigComponent(
-            getAddressById(components, ZKConfigComponentID)
-        ).getValue();
-        if (zkConfig.open) {
-            uint256[4] memory input = [attackInfo.coordHash, attackInfo.seed, attackInfo.width, attackInfo.height];
-            require(
-                IInitVerifier(zkConfig.initVerifyAddress).verifyProof(
-                    attackInfo.a,
-                    attackInfo.b,
-                    attackInfo.c,
-                    input
-                ),
-                "Failed attack proof check"
-            );
-        }
-        uint256 entityId = addressToEntity(msg.sender);
-        require(attackInfo.coordHash == HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).getValue(entityId), "not standing on required tile");
+        // ZKConfig memory zkConfig = ZKConfigComponent(
+        //     getAddressById(components, ZKConfigComponentID)
+        // ).getValue();
+        // if (zkConfig.open) {
+        //     uint256[4] memory input = [attackInfo.coordHash, attackInfo.seed, attackInfo.width, attackInfo.height];
+        //     require(
+        //         IInitVerifier(zkConfig.initVerifyAddress).verifyProof(
+        //             attackInfo.a,
+        //             attackInfo.b,
+        //             attackInfo.c,
+        //             input
+        //         ),
+        //         "Failed attack proof check"
+        //     );
+        // }
+        // uint256 entityId = addressToEntity(msg.sender);
+        // require(attackInfo.coordHash == HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).getValue(entityId), "not standing on required tile");
+        uint256 coordHash = HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).getValue(entityId);
 
         // Constrain position to map size, wrapping around if necessary
-        MapConfig memory mapConfig = MapConfigv2Component(
-            getAddressById(components, MapConfigv2ComponentID)
-        ).getValue();
-        require(
-            attackInfo.width <= mapConfig.gameRadiusX &&
-                attackInfo.height <= mapConfig.gameRadiusY,
-            "radius over limit"
-        );
+        // MapConfig memory mapConfig = MapConfigv2Component(
+        //     getAddressById(components, MapConfigv2ComponentID)
+        // ).getValue();
+        // require(
+        //     attackInfo.width <= mapConfig.gameRadiusX &&
+        //         attackInfo.height <= mapConfig.gameRadiusY,
+        //     "radius over limit"
+        // );
         AttackTimerComponent attackTimer = AttackTimerComponent(
             getAddressById(components, AttackTimerComponentID)
         );
@@ -83,7 +84,7 @@ contract AttackChargeSystem is System {
             getAddressById(components, AttackChargeComponentID)
         );
         require(!attackCharge.has(entityId), "already charging");
-        attackCharge.set(entityId, AttackCharge({coord_hash: attackInfo.coordHash, direction: attackInfo.direction}));
+        attackCharge.set(entityId, AttackCharge({coord_hash: coordHash, direction: attackInfo.direction}));
         attackTimer.set(entityId, AttackTimer({cooldownTimeout: uint64(block.timestamp + 10), chargingTimeout: uint64(block.timestamp + 10)}));
     }
 }

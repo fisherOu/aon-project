@@ -83,7 +83,7 @@ contract AttackFinishSystem is System {
         for (uint i=0; i<10; i++) {
             if (attackInfo.input[30+i] <= mapConfig.gameRadiusX &&
                     attackInfo.input[40+i] <= mapConfig.gameRadiusY) {
-                if (i > 0) {
+                if (i > 0 && attackInfo.input[i] > 0) {
                     uint256[] memory entities = position.getEntitiesWithValue(attackInfo.input[i]);
                     if (entities.length == 0) {
                         continue;

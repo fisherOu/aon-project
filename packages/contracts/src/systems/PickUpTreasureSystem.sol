@@ -27,7 +27,8 @@ struct PickUpInfo {
     uint256 height;
     uint256 seed;
     uint256 treasureSeed;
-    uint256 perlin;
+    uint256 terrainPerlin;
+    uint256 treasurePerlin;
     uint256[2] a;
     uint256[2][2] b;
     uint256[2] c;
@@ -54,7 +55,7 @@ contract PickUpTreasureSystem is System {
             getAddressById(components, ZKConfigComponentID)
         ).getValue();
         if (zkConfig.open) {
-            uint256[6] memory input = [pickUpInfo.coordHash, pickUpInfo.seed, pickUpInfo.treasureSeed, pickUpInfo.perlin, pickUpInfo.width, pickUpInfo.height];
+            uint256[7] memory input = [pickUpInfo.coordHash, pickUpInfo.seed, pickUpInfo.treasureSeed, pickUpInfo.terrainPerlin, pickUpInfo.treasurePerlin, pickUpInfo.width, pickUpInfo.height];
             require(
                 ITreasureVerifier(zkConfig.treasureVerifyAddress).verifyProof(
                     pickUpInfo.a,
@@ -78,9 +79,7 @@ contract PickUpTreasureSystem is System {
         );
         require(
             // hash <= treasureDifficulty <= resourceDifficulty || resourceDifficulty < hash <= treasureDifficulty
-            (pickUpInfo.coordHash <= mapConfig.treasureDifficulty &&
-                mapConfig.treasureDifficulty <= mapConfig.resourceDifficulty) || (pickUpInfo.coordHash <= mapConfig.treasureDifficulty &&
-                pickUpInfo.coordHash > mapConfig.resourceDifficulty),
+            (pickUpInfo.terrainPerlin >= 7500 && pickUpInfo.coordHash / 16 ** (64 - mapConfig.treasureDifficulty) == 0),
             "no treasure to pick up"
         );
         ResourcePositionComponent resourcePosition = ResourcePositionComponent(
@@ -185,7 +184,7 @@ contract PickUpTreasureSystem is System {
 
     function propertyConfigToEffect(PropertyConfigRange memory propertyConfigRange, uint256 rand, uint256 lastEnergy) internal returns (Effect memory effect, uint256 newRand) {
         newRand = rand;
-        if (propertyConfigRange.propertyId > 0) {
+        if (propertyConfigRange.propertyId > 0 && lastEnergy >= 50) {
             effect.valid = 1;
             effect.triggerType = propertyConfigRange.triggerType;
             effect.effectType = propertyConfigRange.effectType;

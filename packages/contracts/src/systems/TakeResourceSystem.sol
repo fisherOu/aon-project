@@ -27,7 +27,8 @@ struct TakeInfo {
     uint256 height;
     uint256 seed;
     uint256 resourceSeed;
-    uint256 perlin;
+    uint256 terrainPerlin;
+    uint256 resourcePerlin;
     uint256[2] a;
     uint256[2][2] b;
     uint256[2] c;
@@ -53,7 +54,7 @@ contract TakeResourceSystem is System {
             getAddressById(components, ZKConfigComponentID)
         ).getValue();
         if (zkConfig.open) {
-            uint256[6] memory input = [takeInfo.coordHash, takeInfo.seed, takeInfo.resourceSeed, takeInfo.perlin, takeInfo.width, takeInfo.height];
+            uint256[7] memory input = [takeInfo.coordHash, takeInfo.seed, takeInfo.resourceSeed, takeInfo.terrainPerlin, takeInfo.resourcePerlin, takeInfo.width, takeInfo.height];
             require(
                 IResourceVerifier(zkConfig.resourceVerifyAddress).verifyProof(
                     takeInfo.a,
