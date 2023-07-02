@@ -13,6 +13,6 @@ library ResourceConfigInitializer {
         ResourceConfigComponent treasureConfig = ResourceConfigComponent(
             world.getComponent(ResourceConfigComponentID)
         );
-        treasureConfig.set(ResourceConfig({ valueMax: 200, valueMin: 50, difficultMax: 10, difficultMin: 4 }));
+        treasureConfig.set(ResourceConfig({ valueMax: 200, valueMin: 50, difficultMax: 2, difficultMin: 1 }));
     }
 }
