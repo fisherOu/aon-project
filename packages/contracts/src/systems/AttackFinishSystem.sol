@@ -66,13 +66,13 @@ contract AttackFinishSystem is System {
         );
         require(attackTimer.has(entityId), "not charging");
         require(attackTimer.getValue(entityId).chargingTimeout <= block.timestamp, "charging not finished");
-        solveAttack(input);
+        solveAttack(attackInfo, entityId);
         // AttackTimer memory timer = attackTimer.getValue(entityId);
         // require((timer.cooldownTimeout == 0 || block.timestamp > timer.cooldownTimeout) && (timer.chargingTimeout == 0 || block.timestamp > timer.chargingTimeout), "already attacking");
         // attackTimer.set(entityId, AttackTimer({cooldownTimeout: }));
     }
 
-    function solveAttack(uint256[50] memory input) internal {
+    function solveAttack(AttackFinishInfo memory attackInfo, uint256 entityId) internal {
         MapConfig memory mapConfig = MapConfigv2Component(
             getAddressById(components, MapConfigv2ComponentID)
         ).getValue();
