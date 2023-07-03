@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["ResourcePositionComponent", "TreasureComponent", "PlayerBelongingComponent", "TreasureEffectComponent"]
+// components: ["TreasureComponent", "PlayerBelongingComponent", "TreasureEffectComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
@@ -9,7 +9,7 @@ import {TreasureConfigComponent, ID as TreasureConfigComponentID, TreasureConfig
 import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components/ZKConfigComponent.sol";
 // import {SingletonID} from "solecs/SingletonID.sol";
 
-import {ResourcePositionComponent, ID as ResourcePositionComponentID} from "components/ResourcePositionComponent.sol";
+// import {ResourcePositionComponent, ID as ResourcePositionComponentID} from "components/ResourcePositionComponent.sol";
 import {PlayerBelongingComponent, ID as PlayerBelongingComponentID} from "components/PlayerBelongingComponent.sol";
 import {TreasureComponent, ID as TreasureComponentID, Treasure} from "components/TreasureComponent.sol";
 import {TreasureEffectComponent, ID as TreasureEffectComponentID, TreasureEffect, Effect} from "components/TreasureEffectComponent.sol";
@@ -82,17 +82,17 @@ contract PickUpTreasureSystem is System {
             (pickUpInfo.terrainPerlin >= 7500 && pickUpInfo.coordHash / 16 ** (64 - mapConfig.treasureDifficulty) == 0),
             "no treasure to pick up"
         );
-        ResourcePositionComponent resourcePosition = ResourcePositionComponent(
-            getAddressById(components, ResourcePositionComponentID)
-        );
-        uint256[] memory treasureIds =  resourcePosition.getEntitiesWithValue(pickUpInfo.coordHash);
-        uint256 treasureId = 0;
-        if (treasureIds.length > 0) {
-            treasureId = treasureIds[0];
-        }
-        if (treasureId == 0) {
-            treasureId = world.getUniqueEntityId();
-        }
+        // ResourcePositionComponent resourcePosition = ResourcePositionComponent(
+        //     getAddressById(components, ResourcePositionComponentID)
+        // );
+        // uint256[] memory treasureIds =  resourcePosition.getEntitiesWithValue(pickUpInfo.coordHash);
+        uint256 treasureId = pickUpInfo.coordHash;
+        // if (treasureIds.length > 0) {
+        //     treasureId = treasureIds[0];
+        // }
+        // if (treasureId == 0) {
+        //     treasureId = world.getUniqueEntityId();
+        // }
         PlayerBelongingComponent playerBelonging = PlayerBelongingComponent(
             getAddressById(components, PlayerBelongingComponentID)
         );
@@ -103,7 +103,7 @@ contract PickUpTreasureSystem is System {
         require(pickUpInfo.energy >= treasureConfig.energyMin && pickUpInfo.energy <= treasureConfig.energyMax, "energy over limit");
 
         // generate treasure properties
-        resourcePosition.set(treasureId, pickUpInfo.coordHash);
+        // resourcePosition.set(treasureId, pickUpInfo.coordHash);
 
         TreasureComponent(getAddressById(components, TreasureComponentID)).set(
             entityId,

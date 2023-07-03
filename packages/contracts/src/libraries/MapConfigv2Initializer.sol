@@ -90,8 +90,8 @@ library MapConfigv2Initializer {
 
         mapConfig.set(
             MapConfig({
-                resourceDifficulty: 5,
-                treasureDifficulty: 7,
+                resourceDifficulty: 1,
+                treasureDifficulty: 2,
                 gameOriginX: 50,
                 gameOriginY: 100,
                 gameRadiusX: 50,

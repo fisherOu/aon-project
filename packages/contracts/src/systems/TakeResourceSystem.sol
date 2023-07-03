@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["GoldAmountComponent", "ResourceMiningComponent", "ResourceComponent", "ResourcePositionComponent"]
+// components: ["GoldAmountComponent", "ResourceMiningComponent", "ResourceComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
@@ -9,7 +9,7 @@ import {ResourceConfigComponent, ID as ResourceConfigComponentID, ResourceConfig
 import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components/ZKConfigComponent.sol";
 // import {SingletonID} from "solecs/SingletonID.sol";
 
-import {ResourcePositionComponent, ID as ResourcePositionComponentID} from "components/ResourcePositionComponent.sol";
+// import {ResourcePositionComponent, ID as ResourcePositionComponentID} from "components/ResourcePositionComponent.sol";
 import {ResourceMiningComponent, ID as ResourceMiningComponentID, ResourceMining} from "components/ResourceMiningComponent.sol";
 import {ResourceComponent, ID as ResourceComponentID, Resource} from "components/ResourceComponent.sol";
 // import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerComponent.sol";
@@ -84,17 +84,17 @@ contract TakeResourceSystem is System {
                 takeInfo.coordHash > mapConfig.resourceDifficulty),
             "no resource to take"
         );
-        ResourcePositionComponent resourcePosition = ResourcePositionComponent(
-            getAddressById(components, ResourcePositionComponentID)
-        );
-        uint256[] memory resourceIds =  resourcePosition.getEntitiesWithValue(takeInfo.coordHash);
-        uint256 resourceId = 0;
-        if (resourceIds.length > 0) {
-            resourceId = resourceIds[0];
-        }
-        if (resourceId == 0) {
-            resourceId = world.getUniqueEntityId();
-        }
+        // ResourcePositionComponent resourcePosition = ResourcePositionComponent(
+        //     getAddressById(components, ResourcePositionComponentID)
+        // );
+        // uint256[] memory resourceIds =  resourcePosition.getEntitiesWithValue(takeInfo.coordHash);
+        uint256 resourceId = takeInfo.coordHash;
+        // if (resourceIds.length > 0) {
+        //     resourceId = resourceIds[0];
+        // }
+        // if (resourceId == 0) {
+        //     resourceId = world.getUniqueEntityId();
+        // }
         // ResourceComponent resource = ResourceComponent(
         //     getAddressById(components, ResourceComponentID)
         // );
@@ -103,7 +103,7 @@ contract TakeResourceSystem is System {
         );
         (uint256 remain, uint256 cache, uint256 difficulty) = getRemainAndCache(resourceId, takeInfo.resourcePerlin);
         require(remain == takeInfo.remain && cache == takeInfo.cache, "remain value invalid");
-        resourcePosition.set(resourceId, takeInfo.coordHash);
+        // resourcePosition.set(resourceId, takeInfo.coordHash);
         if (cache >= 0) {
             GoldAmountComponent goldAmount = GoldAmountComponent(
                 getAddressById(components, GoldAmountComponentID)
