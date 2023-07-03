@@ -83,7 +83,7 @@ contract AttackChargeSystem is System {
         AttackChargeComponent attackCharge = AttackChargeComponent(
             getAddressById(components, AttackChargeComponentID)
         );
-        require(!attackCharge.has(entityId), "already charging");
+        // require(!attackCharge.has(entityId), "already charging");
         attackCharge.set(entityId, AttackCharge({coord_hash: coordHash, direction: attackInfo.direction}));
         attackTimer.set(entityId, AttackTimer({cooldownTimeout: uint64(block.timestamp + 10), chargingTimeout: uint64(block.timestamp + 10)}));
     }
