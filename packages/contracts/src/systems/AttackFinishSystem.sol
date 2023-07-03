@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["AttackChargeComponent", "AttackTimerComponent", "HiddenPositionComponent", "HPComponent"]
+// components: ["TileAnimationComponent", "AttackChargeComponent", "AttackTimerComponent", "HiddenPositionComponent", "HPComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
@@ -11,6 +11,7 @@ import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components
 
 import {AttackChargeComponent, ID as AttackChargeComponentID, AttackCharge} from "components/AttackChargeComponent.sol";
 import {AttackTimerComponent, ID as AttackTimerComponentID, AttackTimer} from "components/AttackTimerComponent.sol";
+import {TileAnimationComponent, ID as TileAnimationComponentID, AttackTimer} from "components/TileAnimationComponent.sol";
 // import {ResourceComponent, ID as ResourceComponentID, Resource} from "components/ResourceComponent.sol";
 // import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerComponent.sol";
 import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
@@ -79,6 +80,10 @@ contract AttackFinishSystem is System {
         HPComponent hp = HPComponent(
             getAddressById(components, HPComponentID)
         );
+        TileAnimationComponent tileAnimation = TileAnimationComponent(
+            getAddressById(components, TileAnimationComponentID)
+        );
+        uint64 timeout = uint64(block.timestamp) + 10;
         require(attackCharge.has(entityId) && attackCharge.getValue(entityId).coord_hash == attackInfo.input[0], "attack not from begining");
         for (uint i=0; i<10; i++) {
             if (attackInfo.input[30+i] <= mapConfig.gameRadiusX &&
@@ -95,8 +100,10 @@ contract AttackFinishSystem is System {
                         if (hitHP - 1 == 0) {
                             position.set(hitPlayer, 0);
                         }
+                        tileAnimation.set(attackInfo.input[i], TileAnimation({animation: "hit", timeout: timeout}));
                         break;
                     }
+                    tileAnimation.set(attackInfo.input[i], TileAnimation({animation: "attackThrough", timeout: timeout}));
                 }
             }
         }
