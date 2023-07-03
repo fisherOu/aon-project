@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["GoldAmountComponent", "ResourceMiningComponent", "ResourceComponent", "ResourcePositionComponent"]
+// components: ["GoldAmountComponent", "ResourceMiningComponent", "ResourceComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
@@ -9,7 +9,7 @@ import {ResourceConfigComponent, ID as ResourceConfigComponentID, ResourceConfig
 import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components/ZKConfigComponent.sol";
 // import {SingletonID} from "solecs/SingletonID.sol";
 
-import {ResourcePositionComponent, ID as ResourcePositionComponentID} from "components/ResourcePositionComponent.sol";
+// import {ResourcePositionComponent, ID as ResourcePositionComponentID} from "components/ResourcePositionComponent.sol";
 import {ResourceMiningComponent, ID as ResourceMiningComponentID, ResourceMining} from "components/ResourceMiningComponent.sol";
 import {ResourceComponent, ID as ResourceComponentID, Resource} from "components/ResourceComponent.sol";
 // import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerComponent.sol";
@@ -82,17 +82,17 @@ contract DigResourceSystem is System {
             (digInfo.terrainPerlin >= 7500 && digInfo.coordHash / 16 ** (64 - mapConfig.resourceDifficulty) == 0 && digInfo.coordHash / 16 ** (64 - mapConfig.treasureDifficulty) > 0),
             "no resource to dig"
         );
-        ResourcePositionComponent resourcePosition = ResourcePositionComponent(
-            getAddressById(components, ResourcePositionComponentID)
-        );
-        uint256[] memory resourceIds =  resourcePosition.getEntitiesWithValue(digInfo.coordHash);
-        uint256 resourceId = 0;
-        if (resourceIds.length > 0) {
-            resourceId = resourceIds[0];
-        }
-        if (resourceId == 0) {
-            resourceId = world.getUniqueEntityId();
-        }
+        // ResourcePositionComponent resourcePosition = ResourcePositionComponent(
+        //     getAddressById(components, ResourcePositionComponentID)
+        // );
+        // uint256[] memory resourceIds =  resourcePosition.getEntitiesWithValue(digInfo.coordHash);
+        uint256 resourceId = digInfo.coordHash;
+        // if (resourceIds.length > 0) {
+        //     resourceId = resourceIds[0];
+        // }
+        // if (resourceId == 0) {
+        //     resourceId = world.getUniqueEntityId();
+        // }
         // ResourceComponent resource = ResourceComponent(
         //     getAddressById(components, ResourceComponentID)
         // );
@@ -103,7 +103,7 @@ contract DigResourceSystem is System {
         require(remain == digInfo.remain && cache == digInfo.cache, "remain value invalid");
         uint256 powResult = uint256(keccak256(abi.encodePacked(digInfo.coordHash, digInfo.remain, digInfo.powNonce))); 
         require(powResult / 16 	** (64 - difficulty) == 0, "pow value invalid");
-        resourcePosition.set(resourceId, digInfo.coordHash);
+        // resourcePosition.set(resourceId, digInfo.coordHash);
         resourceMining.set(resourceId, ResourceMining({remain: remain-1, cache: cache}));
         GoldAmountComponent goldAmount = GoldAmountComponent(
             getAddressById(components, GoldAmountComponentID)
