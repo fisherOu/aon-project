@@ -61,16 +61,21 @@ contract AttackFinishSystem is System {
         // require(attackInfo.coordHash == HiddenPositionComponent(getAddressById(components, HiddenPositionComponentID)).getValue(entityId), "not standing on required tile");
 
         // Constrain position to map size, wrapping around if necessary
-        MapConfig memory mapConfig = MapConfigv2Component(
-            getAddressById(components, MapConfigv2ComponentID)
-        ).getValue();
         AttackTimerComponent attackTimer = AttackTimerComponent(
             getAddressById(components, AttackTimerComponentID)
         );
         require(attackTimer.has(entityId), "not charging");
         require(attackTimer.getValue(entityId).chargingTimeout <= block.timestamp, "charging not finished");
+        solveAttack(input);
         // AttackTimer memory timer = attackTimer.getValue(entityId);
         // require((timer.cooldownTimeout == 0 || block.timestamp > timer.cooldownTimeout) && (timer.chargingTimeout == 0 || block.timestamp > timer.chargingTimeout), "already attacking");
+        // attackTimer.set(entityId, AttackTimer({cooldownTimeout: }));
+    }
+
+    function solveAttack(uint256[50] memory input) internal {
+        MapConfig memory mapConfig = MapConfigv2Component(
+            getAddressById(components, MapConfigv2ComponentID)
+        ).getValue();
         AttackChargeComponent attackCharge = AttackChargeComponent(
             getAddressById(components, AttackChargeComponentID)
         );
@@ -108,6 +113,5 @@ contract AttackFinishSystem is System {
             }
         }
         attackCharge.remove(entityId);
-        // attackTimer.set(entityId, AttackTimer({cooldownTimeout: }));
     }
 }
