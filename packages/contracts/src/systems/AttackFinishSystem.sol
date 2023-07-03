@@ -11,7 +11,7 @@ import {ZKConfigComponent, ID as ZKConfigComponentID, ZKConfig} from "components
 
 import {AttackChargeComponent, ID as AttackChargeComponentID, AttackCharge} from "components/AttackChargeComponent.sol";
 import {AttackTimerComponent, ID as AttackTimerComponentID, AttackTimer} from "components/AttackTimerComponent.sol";
-import {TileAnimationComponent, ID as TileAnimationComponentID, AttackTimer} from "components/TileAnimationComponent.sol";
+import {TileAnimationComponent, ID as TileAnimationComponentID, TileAnimation} from "components/TileAnimationComponent.sol";
 // import {ResourceComponent, ID as ResourceComponentID, Resource} from "components/ResourceComponent.sol";
 // import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerComponent.sol";
 import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
