@@ -63,7 +63,7 @@ contract JoinGamev2System is System {
         PlayerComponent player = PlayerComponent(
             getAddressById(components, PlayerComponentID)
         );
-        require(!player.has(entityId) || player.getValue(entityId) == false, "already joined");
+        require(!player.has(entityId), "already joined");
 
         // Constrain position to map size, wrapping around if necessary
         MapConfig memory mapConfig = MapConfigv2Component(

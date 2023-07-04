@@ -107,7 +107,7 @@ contract AttackFinishSystem is System {
                     if (hp.has(hitPlayer) && hitHP > 0) {
                         hp.set(hitPlayer, hitHP - 1);
                         if (hitHP - 1 == 0) {
-                            position.remove(hitPlayer);
+                            position.set(hitPlayer, 0);
                             hp.remove(hitPlayer);
                             GoldAmountComponent(
                                 getAddressById(components, GoldAmountComponentID)
@@ -117,7 +117,7 @@ contract AttackFinishSystem is System {
                             ).remove(hitPlayer);
                             PlayerComponent(
                                 getAddressById(components, PlayerComponentID)
-                            ).set(hitPlayer, false);
+                            ).remove(hitPlayer);
                             MoveCooldownComponent(
                                 getAddressById(components, MoveCooldownComponentID)
                             ).remove(hitPlayer);

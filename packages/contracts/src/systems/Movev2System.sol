@@ -57,7 +57,7 @@ contract Movev2System is System {
     uint256 entityId = addressToEntity(msg.sender);
 
     PlayerComponent player = PlayerComponent(getAddressById(components, PlayerComponentID));
-    require(player.has(entityId) && player.getValue(entityId) == true, "not joined");
+    require(player.has(entityId), "not joined");
 
     MoveCooldownComponent moveCooldown = MoveCooldownComponent(getAddressById(components, MoveCooldownComponentID));
     MoveConfig memory moveConfig = MoveConfigComponent(getAddressById(components, MoveConfigComponentID)).getValue();
