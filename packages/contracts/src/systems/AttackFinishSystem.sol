@@ -100,6 +100,7 @@ contract AttackFinishSystem is System {
                 if (i > 0 && attackInfo.input[i] > 0) {
                     uint256[] memory entities = position.getEntitiesWithValue(attackInfo.input[i]);
                     if (entities.length == 0) {
+                        tileAnimation.set(attackInfo.input[i], TileAnimation({animation: "attackThrough", timeout: timeout}));
                         continue;
                     }
                     uint256 hitPlayer = entities[0];
@@ -127,7 +128,6 @@ contract AttackFinishSystem is System {
                         }
                         break;
                     }
-                    tileAnimation.set(attackInfo.input[i], TileAnimation({animation: "attackThrough", timeout: timeout}));
                 }
             }
         }
