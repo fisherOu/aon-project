@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["TileAnimationComponent", "AttackChargeComponent", "AttackTimerComponent", "HiddenPositionComponent", "HPComponent"]
+// components: ["GoldAmountComponent", "MoveCooldownComponent", "TileAnimationComponent", "AttackChargeComponent", "AttackTimerComponent", "HiddenPositionComponent", "HPComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
@@ -15,6 +15,8 @@ import {TileAnimationComponent, ID as TileAnimationComponentID, TileAnimation} f
 // import {ResourceComponent, ID as ResourceComponentID, Resource} from "components/ResourceComponent.sol";
 // import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerComponent.sol";
 import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
+import {GoldAmountComponent, ID as GoldAmountComponentID} from "components/GoldAmountComponent.sol";
+import {MoveCooldownComponent, ID as MoveCooldownComponentID} from "components/MoveCooldownComponent.sol";
 import {HPComponent, ID as HPComponentID} from "components/HPComponent.sol";
 // import {WarshipComponent, ID as WarshipComponentID, Warship} from "components/WarshipComponent.sol";
 // import {MoveCooldownComponent, ID as MoveCooldownComponentID, MoveCooldown} from "components/MoveCooldownComponent.sol";
@@ -103,9 +105,18 @@ contract AttackFinishSystem is System {
                     if (hp.has(hitPlayer) && hitHP > 0) {
                         hp.set(hitPlayer, hitHP - 1);
                         if (hitHP - 1 == 0) {
-                            position.set(hitPlayer, 0);
+                            position.remove(hitPlayer);
+                            hp.remove(hitPlayer);
+                            GoldAmountComponent(
+                                getAddressById(components, GoldAmountComponentID)
+                            ).remove(hitPlayer);
+                            MoveCooldownComponent(
+                                getAddressById(components, MoveCooldownComponentID)
+                            ).remove(hitPlayer);
+                            tileAnimation.set(attackInfo.input[i], TileAnimation({animation: "dead", timeout: timeout}));
+                        } else {
+                            tileAnimation.set(attackInfo.input[i], TileAnimation({animation: "hit", timeout: timeout}));
                         }
-                        tileAnimation.set(attackInfo.input[i], TileAnimation({animation: "hit", timeout: timeout}));
                         break;
                     }
                     tileAnimation.set(attackInfo.input[i], TileAnimation({animation: "attackThrough", timeout: timeout}));
