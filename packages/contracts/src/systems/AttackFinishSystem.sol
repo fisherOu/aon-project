@@ -112,6 +112,12 @@ contract AttackFinishSystem is System {
                             GoldAmountComponent(
                                 getAddressById(components, GoldAmountComponentID)
                             ).remove(hitPlayer);
+                            WarshipComponent(
+                                getAddressById(components, WarshipComponentID)
+                            ).remove(hitPlayer);
+                            PlayerComponent(
+                                getAddressById(components, PlayerComponentID)
+                            ).set(hitPlayer, false);
                             MoveCooldownComponent(
                                 getAddressById(components, MoveCooldownComponentID)
                             ).remove(hitPlayer);
