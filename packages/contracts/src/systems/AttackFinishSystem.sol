@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// components: ["GoldAmountComponent", "MoveCooldownComponent", "TileAnimationComponent", "AttackChargeComponent", "AttackTimerComponent", "HiddenPositionComponent", "HPComponent"]
+// components: ["WarshipComponent", "PlayerComponent", "GoldAmountComponent", "MoveCooldownComponent", "TileAnimationComponent", "AttackChargeComponent", "AttackTimerComponent", "HiddenPositionComponent", "HPComponent"]
 pragma solidity >=0.8.0;
 import {addressToEntity} from "solecs/utils.sol";
 import {System, IWorld} from "solecs/System.sol";
@@ -16,6 +16,8 @@ import {TileAnimationComponent, ID as TileAnimationComponentID, TileAnimation} f
 // import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerComponent.sol";
 import {HiddenPositionComponent, ID as HiddenPositionComponentID} from "components/HiddenPositionComponent.sol";
 import {GoldAmountComponent, ID as GoldAmountComponentID} from "components/GoldAmountComponent.sol";
+import {WarshipComponent, ID as WarshipComponentID} from "components/WarshipComponent.sol";
+import {PlayerComponent, ID as PlayerComponentID} from "components/PlayerComponent.sol";
 import {MoveCooldownComponent, ID as MoveCooldownComponentID} from "components/MoveCooldownComponent.sol";
 import {HPComponent, ID as HPComponentID} from "components/HPComponent.sol";
 // import {WarshipComponent, ID as WarshipComponentID, Warship} from "components/WarshipComponent.sol";
