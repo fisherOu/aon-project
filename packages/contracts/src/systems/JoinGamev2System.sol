@@ -91,7 +91,7 @@ contract JoinGamev2System is System {
         );
         HPComponent(getAddressById(components, HPComponentID)).set(
             entityId,
-            1
+            2
         );
         GoldAmountComponent(getAddressById(components, GoldAmountComponentID)).set(
             entityId,
